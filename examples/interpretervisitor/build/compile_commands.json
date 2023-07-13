@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/stefano/code/c-cpp/lisplikeproject/examples/interpretervisitor/build",
+  "command": "/usr/bin/c++ -g -o CMakeFiles/interpretervisitor.dir/InterpreterVisitor.cpp.o -c /home/stefano/code/c-cpp/lisplikeproject/examples/interpretervisitor/InterpreterVisitor.cpp",
+  "file": "/home/stefano/code/c-cpp/lisplikeproject/examples/interpretervisitor/InterpreterVisitor.cpp",
+  "output": "CMakeFiles/interpretervisitor.dir/InterpreterVisitor.cpp.o"
+}
+]
