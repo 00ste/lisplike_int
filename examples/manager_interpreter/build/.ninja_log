@@ -1,0 +1,7 @@
+# ninja log v5
+1	351	1689188234188178660	CMakeFiles/manager_interpreter.dir/main.cpp.o	e10586105e4f2d4
+352	459	1689188234295178693	manager_interpreter	2632c3f9d24bcca6
+0	362	1689188323102206163	CMakeFiles/manager_interpreter.dir/ExpressionInterpreter.cpp.o	5bfb8573ee6068fa
+364	477	1689188323216206198	manager_interpreter	cf2329bc6cad106
+2	447	1689189303974839848	CMakeFiles/manager_interpreter.dir/ExpressionInterpreter.cpp.o	5bfb8573ee6068fa
+448	541	1689189304066839976	manager_interpreter	cf2329bc6cad106

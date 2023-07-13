@@ -1,0 +1,7 @@
+/home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/build/CMakeFiles/simpleinterpreter2.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/build/CMakeFiles/edit_cache.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/build/CMakeFiles/rebuild_cache.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/build/CMakeFiles/list_install_components.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/build/CMakeFiles/install.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/build/CMakeFiles/install/local.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/build/CMakeFiles/install/strip.dir

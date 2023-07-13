@@ -1,0 +1,7 @@
+/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build/CMakeFiles/manager_interpreter.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build/CMakeFiles/edit_cache.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build/CMakeFiles/rebuild_cache.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build/CMakeFiles/list_install_components.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build/CMakeFiles/install.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build/CMakeFiles/install/local.dir
+/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build/CMakeFiles/install/strip.dir

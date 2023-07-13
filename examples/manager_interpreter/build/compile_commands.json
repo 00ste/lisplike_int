@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/build",
+  "command": "/usr/bin/c++ -g -o CMakeFiles/manager_interpreter.dir/ExpressionInterpreter.cpp.o -c /home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/ExpressionInterpreter.cpp",
+  "file": "/home/stefano/code/c-cpp/lisplikeproject/examples/manager_interpreter/manager_interpreter/ExpressionInterpreter.cpp",
+  "output": "CMakeFiles/manager_interpreter.dir/ExpressionInterpreter.cpp.o"
+}
+]

@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/stefano/code/c-cpp/lisplikeproject/examples/parser/build",
+  "command": "/usr/bin/c++ -g -o CMakeFiles/parser.dir/ExpressionParser.cpp.o -c /home/stefano/code/c-cpp/lisplikeproject/examples/parser/ExpressionParser.cpp",
+  "file": "/home/stefano/code/c-cpp/lisplikeproject/examples/parser/ExpressionParser.cpp",
+  "output": "CMakeFiles/parser.dir/ExpressionParser.cpp.o"
+}
+]
