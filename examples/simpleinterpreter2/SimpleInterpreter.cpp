@@ -22,7 +22,10 @@ int main()
             std::cout << "Risultato: " << (*expr).interpret() << std::endl;
         }
         else
+        {
             std::cout << "Espressione errata" << std::endl;
+            manager.clearMemory();
+        }
     }
     while (exp != "quit");
 }

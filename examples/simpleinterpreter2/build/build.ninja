@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_simpleinterpreter2: phony || CMakeFiles/
 
 build CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o: CXX_COMPILER__simpleinterpreter2_unscanned_Debug /home/stefano/code/c-cpp/lisplikeproject/examples/simpleinterpreter2/SimpleInterpreter.cpp || cmake_object_order_depends_target_simpleinterpreter2
   DEP_FILE = CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o.d
-  FLAGS = -g
+  FLAGS = -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/simpleinterpreter2.dir
   OBJECT_FILE_DIR = CMakeFiles/simpleinterpreter2.dir
 

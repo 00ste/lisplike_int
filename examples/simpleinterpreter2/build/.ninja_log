@@ -1,17 +1,4 @@
 # ninja log v5
-1	501	1689262313597554620	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-1	434	1689262392126563766	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-3	454	1689262620969590416	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	428	1689262675098596720	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-3	439	1689262890201627952	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	471	1689263047996661110	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	469	1689263066061664906	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-1	487	1689263314097717027	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	492	1689263351359724857	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-4	491	1689278127160043939	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	440	1689278229925163001	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	470	1689278295581071169	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	461	1689278322119034050	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-3	461	1689278386074944596	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
-2	429	1689278454596531894	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
 2	436	1689278725393036048	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	1114effa80bdb7e9
+2	266	1689285877848058146	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	733e7d14aadef0f3
+3	250	1689286481292836216	CMakeFiles/simpleinterpreter2.dir/SimpleInterpreter.cpp.o	733e7d14aadef0f3

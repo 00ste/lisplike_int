@@ -16,8 +16,7 @@ public:
 	// quando si elimina il manager, questo è responsabile di deallocare
 	// tutti i nodi che ha allocato
 	~ExpressionManager() {
-		for (Expression* node : allocated)
-			delete(node);
+		clearMemory();
 	}
 
 	// disabilitate copia e assegnamento per evitare problemi di
@@ -42,6 +41,12 @@ public:
 		Expression* o = new Operator(op, l, r);
 		allocated.push_back(o);
 		return o;
+	}
+
+	void clearMemory()
+	{
+		for (Expression* node : allocated)
+			delete(node);
 	}
 private:
 	std::vector<Expression*> allocated;
