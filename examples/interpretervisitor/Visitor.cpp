@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Visitor.h"
 
 void EvaluationVisitor::visitNumber(Number* numNode)
@@ -31,4 +33,18 @@ void EvaluationVisitor::visitOperator(Operator* opNode)
         default:
             return;
     }
+}
+
+void PrintVisitor::visitNumber(Number* numNode)
+{
+    std::cout << (*numNode).getValue();
+}
+
+void PrintVisitor::visitOperator(Operator* opNode)
+{
+    std::cout << '(';
+    opNode->getLeft()->accept(this);
+    std::cout << Operator::opCodeToChar((*opNode).getOp());
+    opNode->getRight()->accept(this);
+    std::cout << ')';
 }

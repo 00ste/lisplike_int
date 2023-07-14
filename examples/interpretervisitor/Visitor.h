@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <sstream>
 
 #include "Expression.h"
 
@@ -16,22 +17,19 @@ public:
 };
 
 // un visitor concreto che si occupa di interpretare.
-// in questo modo l'operazione di interpreatare, così come una
+// in questo modo l'operazione di interpretare, così come una
 // qualsiasi altra operazione da aggiungere, viene specificata
-// in un solo punto per tutti gli oggetti,
+// in un solo punto per tutti gli oggetti
 class EvaluationVisitor : public Visitor
 {
 public:
     EvaluationVisitor() : accumulator{} {}
 
     void visitOperator(Operator* opNode) override;
-
     void visitNumber(Number* numNode) override;
 
-    int getValue() const
-    {
-        return accumulator.back();
-    }
+    int getValue() const { return accumulator.back(); }
+
 private:
     std::vector<int> accumulator;
 };
@@ -46,13 +44,6 @@ private:
 class PrintVisitor : public Visitor
 {
 public:
-    void visitOperator(Operator* opNode) override
-    {
-
-    }
-
-    void visitNumber(Number* numNode) override
-    {
-
-    }
+    void visitOperator(Operator* opNode) override;
+    void visitNumber(Number* numNode) override;
 };

@@ -78,6 +78,18 @@ public:
         }
     }
 
+    // metodo di utilità per convertire i caratteri in OpCode
+    static char opCodeToChar(OpCode op)
+    {
+        switch (op)
+        {
+        case PLUS: 	return '+';
+        case MINUS: return '-';
+        case TIMES: return '*';
+        case DIV: 	return '/';
+        }
+    }
+
 
 private:
 	OpCode		op;
