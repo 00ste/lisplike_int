@@ -25,16 +25,9 @@ int main(int argc, char* argv[])
 
     // controllo sui file
     std::ifstream inputFile;
-
     try
     {
         inputFile.open(argv[1]);
-    }
-    catch (LexicalError exc)
-    {
-        std::cerr << "Errore in fase di analisi lessicale" << std::endl;
-        std::cerr << "Eccezione dice: " << exc.what() << std::endl;
-        return EXIT_FAILURE;
     }
     catch (std::exception& exc)
     {
@@ -51,6 +44,12 @@ int main(int argc, char* argv[])
     {
         inputTokens = std::move(tokenize(inputFile));
         inputFile.close();
+    }
+    catch (LexicalError exc)
+    {
+        std::cerr << "Errore in fase di analisi lessicale" << std::endl;
+        std::cerr << "Eccezione dice: " << exc.what() << std::endl;
+        return EXIT_FAILURE;
     }
     catch (std::exception& exc)
     {
@@ -73,7 +72,7 @@ int main(int argc, char* argv[])
     try
     {
         Expression* expr = parse(inputTokens);
-        PrintVisitor* p = new PrintVisito();
+        PrintVisitor* p = new PrintVisitor();
         std::cout << "Espressione letta: ";
         (*expr).accept(p);
         std::cout << std::endl;

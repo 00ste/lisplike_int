@@ -25,6 +25,7 @@ struct Token
     static constexpr int MUL = 4;   // *
     static constexpr int DIV = 5;   // /
     static constexpr int NUM = 6;   // numero qualsiasi
+    static constexpr int SET = 7;
 
     static constexpr const char* id2word[]
     {

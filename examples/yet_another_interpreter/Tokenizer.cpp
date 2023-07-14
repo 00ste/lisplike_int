@@ -7,7 +7,6 @@
 void Tokenizer::tokenizeInputFile(std::ifstream& inputFile,
     std::vector<Token>& inputTokens)
 {
-
     char ch;
     ch = inputFile.get();
     // lettura del file carattere per carattere

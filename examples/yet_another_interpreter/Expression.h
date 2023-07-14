@@ -11,7 +11,7 @@ class Expression
 {
 public:
 	virtual ~Expression() {};
-	virtual void accept(Visitor* v);
+	virtual void accept(Visitor* v) = 0;
 };
 
 // Classe derivata per numeri interi

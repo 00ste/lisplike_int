@@ -1,0 +1,86 @@
+#ifndef NUM_EXPR_H
+#define NUM_EXPR_H
+
+#include "NumExpr.h"
+
+/*
+ * Espressione booleana (true/false) generica
+ */
+class BoolExpr
+{
+public:
+	virtual ~BoolExpr() {};
+	virtual void accept(Visitor* v) = 0;
+};
+
+/*
+ * Rappresenta un'operazione di confronto (GT, LS, EQ)
+ * tra due espressioni numeriche
+ */
+class RelOp : public BoolExpr
+{
+public:
+	enum OpCode { GT, LS, EQ };
+	RelOp(OpCode o, NumExpr* lop, NumExpr* rop) :
+		operation{ o }, left{ lop }, right{ rop } {}
+	RelOp(const RelOp& other) = default;
+	~RelOp() = default;
+	RelOp& operator=(const RelOp& other) = default;
+
+	// metodi di accesso
+	OpCode getOp() const { return operation; }
+	NumExpr* getLeft() const { return left; }
+	NumExpr* getRight() const { return right; }
+
+	void accept(Visitor* v) override;
+private:
+	OpCode operation;
+	NumExpr* left;
+	NumExpr* right;
+};
+
+/*
+ * Rappresenta un'operazione booleana (AND, OR, NOT)
+ * tra due espressioni numeriche
+ */
+class BoolOp : public BoolExpr
+{
+public:
+	enum OpCode { AND, OR, NOT };
+	BoolOp(OpCode o, BoolExpr* lop, BoolExpr* rop) :
+		operation{ o }, left{ lop }, right{ rop } {}
+	BoolOp(const BoolOp& other) = default;
+	~BoolOp() = default;
+	BoolOp& operator=(const BoolOp& other) = default;
+
+	// metodi di accesso
+	OpCode getOp() const { return operation; }
+	BoolExpr* getLeft() const { return left; }
+	BoolExpr* getRight() const
+	{
+		if (operation == NOT)
+			return nullptr;
+		return right;
+	}
+
+	void accept(Visitor* v) override;
+private:
+	OpCode operation;
+	BoolExpr* left;
+	BoolExpr* right;
+};
+
+class BoolConst : public BoolExpr
+{
+public:
+	BoolConst(int v) : value{ v } {}
+	BoolConst(const BoolConst& other) = default;
+	~BoolConst() {}
+	BoolConst& operator=(const BoolConst& other) = default;
+
+	int getValue() const { return value; }
+private:
+	bool value;
+};
+
+#endif
