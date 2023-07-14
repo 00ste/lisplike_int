@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/stefano/code/c-cpp/lisplikeproject/examples/yet_another_interpreter/build",
+  "command": "/usr/bin/c++ -g -o CMakeFiles/yet_another_interpreter.dir/YetAnotherInterpreter.cpp.o -c /home/stefano/code/c-cpp/lisplikeproject/examples/yet_another_interpreter/YetAnotherInterpreter.cpp",
+  "file": "/home/stefano/code/c-cpp/lisplikeproject/examples/yet_another_interpreter/YetAnotherInterpreter.cpp",
+  "output": "CMakeFiles/yet_another_interpreter.dir/YetAnotherInterpreter.cpp.o"
+}
+]
