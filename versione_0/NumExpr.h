@@ -3,6 +3,10 @@
 
 #include <string>
 
+// Visitor include già NumExpr, quindi NumExpr non può includere
+// a sua volta Visitor, ma la classe deve comunque essere dichiarata
+class Visitor;
+
 /*
  * Espressione numerica generica
  */

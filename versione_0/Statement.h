@@ -1,8 +1,13 @@
 #ifndef STATEMENT_H
 #define STATEMENT_H
 
+#include "Block.h"
 #include "NumExpr.h"
 #include "BoolExpr.h"
+
+// Visitor include già Statement, quindi Statement non può includere
+// a sua volta Visitor, ma la classe deve comunque essere dichiarata
+class Visitor;
 
 /*
  * Statement generico all'interno del programma
@@ -32,14 +37,14 @@ public:
  *   esempio divisione per 0)
  */
 
-class IfStatement : public Statement
+class IfStmt : public Statement
 {
 public:
-	IfStatement(const BoolExpr& c, const Block& b_if, const Block& b_else)
+	IfStmt(BoolExpr* c, Block* b_if, Block* b_else)
 		: condition{ c }, blockIf{ b_if }, blockElse{ b_else } {};
 	// facciamo che vanno bene i costruttori e distruttori di default
-	IfStatement(const IfStatement& other) = default;
-	~IfStatement() = default;
+	IfStmt(const IfStmt& other) = default;
+	~IfStmt() = default;
 	void accept(Visitor* v) override;
 private:
 	BoolExpr* condition;
@@ -64,14 +69,14 @@ private:
  * - lo stmtBlock, se eseguito, contiene errori semantici (ad
  *   esempio divisione per 0)
  */
-class WhileStatement : public Statement
+class WhileStmt : public Statement
 {
 public:
-	WhileStatement(const BoolExpr& c, const Block& b)
+	WhileStmt(BoolExpr* c, Block* b)
 		: condition{ c }, block{ b } {};
 	// facciamo che vanno bene i costruttori e distruttori di default
-	WhileStatement(const WhileStatement& other) = default;
-	~WhileStatement() = default;
+	WhileStmt(const WhileStmt& other) = default;
+	~WhileStmt() = default;
 	void accept(Visitor* v) override;
 private:
 	BoolExpr* condition;
@@ -92,14 +97,14 @@ private:
  * - id_variabile è una parola chiave
  * - viene inserito da console un valore illecito
  */
-class InputStatement : public Statement
+class InputStmt : public Statement
 {
 public:
-	InputStatement(const Variable& var_id)
+	InputStmt(Variable* var_id)
 		: varId{ var_id } {};
 	// facciamo che vanno bene i costruttori e distruttori di default
-	InputStatement(const InputStatement& other) = default;
-	~InputStatement() = default;
+	InputStmt(const InputStmt& other) = default;
+	~InputStmt() = default;
 	void accept(Visitor* v) override;
 private:
 	Variable* varId;
@@ -121,14 +126,14 @@ private:
  * - la num_expr, se eseguita, contiene errori semantici (ad
  *   esempio divisione per 0)
  */
-class SetStatement : public Statement
+class SetStmt : public Statement
 {
 public:
-	SetStatement(const Variable& var_id, const NumExpr& num_expr)
+	SetStmt(Variable* var_id, NumExpr* num_expr)
 		: varId{ var_id }, newValue{ num_expr } {};
 	// facciamo che vanno bene i costruttori e distruttori di default
-	SetStatement(const SetStatement& other) = default;
-	~SetStatement() = default;
+	SetStmt(const SetStmt& other) = default;
+	~SetStmt() = default;
 	void accept(Visitor* v) override;
 private:
 	Variable* varId;
@@ -138,14 +143,14 @@ private:
 /*
  * dopo
  */
-class PrintStatement : public Statement
+class PrintStmt : public Statement
 {
 public:
-	PrintStatement(const NumExpr& num_expr)
+	PrintStmt(NumExpr* num_expr)
 		: printValue{ num_expr } {};
 	// facciamo che vanno bene i costruttori e distruttori di default
-	PrintStatement(const PrintStatement& other) = default;
-	~PrintStatement() = default;
+	PrintStmt(const PrintStmt& other) = default;
+	~PrintStmt() = default;
 	void accept(Visitor* v) override;
 private:
 	NumExpr* printValue;

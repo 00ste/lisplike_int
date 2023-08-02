@@ -1,7 +1,11 @@
-#ifndef NUM_EXPR_H
-#define NUM_EXPR_H
+#ifndef BOOL_EXPR_H
+#define BOOL_EXPR_H
 
 #include "NumExpr.h"
+
+// Visitor include già BoolExpr, quindi BoolExpr non può includere
+// a sua volta Visitor, ma la classe deve comunque essere dichiarata
+class Visitor;
 
 /*
  * Espressione booleana (true/false) generica
@@ -77,6 +81,8 @@ public:
 	BoolConst(const BoolConst& other) = default;
 	~BoolConst() {}
 	BoolConst& operator=(const BoolConst& other) = default;
+
+	void accept(Visitor* v) override;
 
 	int getValue() const { return value; }
 private:
