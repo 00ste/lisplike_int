@@ -36,7 +36,6 @@ public:
  * - uno dei due stmtBlock, se eseguito, contiene errori semantici (ad
  *   esempio divisione per 0)
  */
-
 class IfStmt : public Statement
 {
 public:
@@ -45,7 +44,12 @@ public:
 	// facciamo che vanno bene i costruttori e distruttori di default
 	IfStmt(const IfStmt& other) = default;
 	~IfStmt() = default;
+
 	void accept(Visitor* v) override;
+
+	BoolExpr* getCondition() const { return condition; }
+	Block* getBlockIf() const { return blockIf; }
+	Block* getBlockElse() const { return blockElse; }
 private:
 	BoolExpr* condition;
 	Block* blockIf;
@@ -77,7 +81,11 @@ public:
 	// facciamo che vanno bene i costruttori e distruttori di default
 	WhileStmt(const WhileStmt& other) = default;
 	~WhileStmt() = default;
+
 	void accept(Visitor* v) override;
+
+	BoolExpr* getCondition() const { return condition; }
+	Block* getBlock() const { return block; }
 private:
 	BoolExpr* condition;
 	Block* block;
@@ -105,7 +113,10 @@ public:
 	// facciamo che vanno bene i costruttori e distruttori di default
 	InputStmt(const InputStmt& other) = default;
 	~InputStmt() = default;
+
 	void accept(Visitor* v) override;
+
+	Variable* getVarId() const { return varId; }
 private:
 	Variable* varId;
 };
@@ -134,7 +145,11 @@ public:
 	// facciamo che vanno bene i costruttori e distruttori di default
 	SetStmt(const SetStmt& other) = default;
 	~SetStmt() = default;
+
 	void accept(Visitor* v) override;
+
+	Variable* getVarId() const { return varId; }
+	NumExpr* getNewValue() const { return newValue; }
 private:
 	Variable* varId;
 	NumExpr* newValue;
@@ -151,7 +166,10 @@ public:
 	// facciamo che vanno bene i costruttori e distruttori di default
 	PrintStmt(const PrintStmt& other) = default;
 	~PrintStmt() = default;
+
 	void accept(Visitor* v) override;
+
+	NumExpr* getPrintValue() const { return printValue; }
 private:
 	NumExpr* printValue;
 };

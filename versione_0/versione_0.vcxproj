@@ -127,10 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BoolExpr.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NumExpr.cpp" />
+    <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="Visitor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="BoolExpr.h" />
+    <ClInclude Include="NumExpr.h" />
     <ClInclude Include="Statement.h" />
+    <ClInclude Include="Visitor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

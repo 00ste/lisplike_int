@@ -1,2 +1,131 @@
-﻿  main.cpp
-  versione_0.vcxproj -> C:\code\cpp\test_progetto\x64\Debug\versione_0.exe
+﻿  Block.cpp
+C:\code\vs22_cpp\lisplike_int\versione_0\BoolExpr.h(80,26): error C2397: conversion from 'int' to 'bool' requires a narrowing conversion
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(42,22): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,28): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,30): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,16): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,18): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,30): error C2065: 'b_if': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,49): error C2065: 'b_else': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,21): error C2614: 'IfStmt': illegal member initialization: 'blockIf' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,38): error C2614: 'IfStmt': illegal member initialization: 'blockElse' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(79,25): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,26): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,14): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,28): error C2065: 'b': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,21): error C2614: 'WhileStmt': illegal member initialization: 'block' is not a base or member
+  BoolExpr.cpp
+C:\code\vs22_cpp\lisplike_int\versione_0\BoolExpr.h(80,26): error C2397: conversion from 'int' to 'bool' requires a narrowing conversion
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(42,22): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,28): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,30): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,16): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,18): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,30): error C2065: 'b_if': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,49): error C2065: 'b_else': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,21): error C2614: 'IfStmt': illegal member initialization: 'blockIf' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,38): error C2614: 'IfStmt': illegal member initialization: 'blockElse' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(79,25): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,26): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,14): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,28): error C2065: 'b': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,21): error C2614: 'WhileStmt': illegal member initialization: 'block' is not a base or member
+  main.cpp
+  NumExpr.cpp
+C:\code\vs22_cpp\lisplike_int\versione_0\BoolExpr.h(80,26): error C2397: conversion from 'int' to 'bool' requires a narrowing conversion
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(42,22): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,28): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,30): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,16): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,18): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,30): error C2065: 'b_if': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,49): error C2065: 'b_else': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,21): error C2614: 'IfStmt': illegal member initialization: 'blockIf' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,38): error C2614: 'IfStmt': illegal member initialization: 'blockElse' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(79,25): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,26): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,14): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,28): error C2065: 'b': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,21): error C2614: 'WhileStmt': illegal member initialization: 'block' is not a base or member
+  Statement.cpp
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(22,23): error C2061: syntax error: identifier 'Statement'
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(25,20): error C2065: 'Statement': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(25,30): error C2059: syntax error: '>'
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(25,30): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(25,31): error C2062: type 'unknown-type' unexpected
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(26,2): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(32,14): error C2065: 'Statement': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(32,24): error C2059: syntax error: '>'
+C:\code\vs22_cpp\lisplike_int\versione_0\Block.h(23,24): error C2065: 'statement': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\BoolExpr.h(80,26): error C2397: conversion from 'int' to 'bool' requires a narrowing conversion
+  Visitor.cpp
+C:\code\vs22_cpp\lisplike_int\versione_0\BoolExpr.h(80,26): error C2397: conversion from 'int' to 'bool' requires a narrowing conversion
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(42,22): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(51,28): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(52,30): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(55,16): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(56,18): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,30): error C2065: 'b_if': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,49): error C2065: 'b_else': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,21): error C2614: 'IfStmt': illegal member initialization: 'blockIf' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(43,38): error C2614: 'IfStmt': illegal member initialization: 'blockElse' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(79,25): error C2061: syntax error: identifier 'Block'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(88,26): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C2143: syntax error: missing ';' before '*'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(91,14): error C2238: unexpected token(s) preceding ';'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,28): error C2065: 'b': undeclared identifier
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(80,21): error C2614: 'WhileStmt': illegal member initialization: 'block' is not a base or member
+C:\code\vs22_cpp\lisplike_int\versione_0\Visitor.cpp(44,15): error C2039: 'getBlockIf': is not a member of 'IfStmt'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(39,7): message : see declaration of 'IfStmt'
+C:\code\vs22_cpp\lisplike_int\versione_0\Visitor.cpp(46,15): error C2039: 'getBlockElse': is not a member of 'IfStmt'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(39,7): message : see declaration of 'IfStmt'
+C:\code\vs22_cpp\lisplike_int\versione_0\Visitor.cpp(71,19): error C2039: 'getBlock': is not a member of 'WhileStmt'
+C:\code\vs22_cpp\lisplike_int\versione_0\Statement.h(76,7): message : see declaration of 'WhileStmt'
+  Generating Code...

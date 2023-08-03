@@ -24,19 +24,19 @@ public:
 class RelOp : public BoolExpr
 {
 public:
-	enum OpCode { GT, LS, EQ };
+	enum OpCode { GT, LT, EQ };
+
 	RelOp(OpCode o, NumExpr* lop, NumExpr* rop) :
 		operation{ o }, left{ lop }, right{ rop } {}
 	RelOp(const RelOp& other) = default;
 	~RelOp() = default;
 	RelOp& operator=(const RelOp& other) = default;
 
-	// metodi di accesso
+	void accept(Visitor* v) override;
+
 	OpCode getOp() const { return operation; }
 	NumExpr* getLeft() const { return left; }
 	NumExpr* getRight() const { return right; }
-
-	void accept(Visitor* v) override;
 private:
 	OpCode operation;
 	NumExpr* left;
@@ -51,13 +51,15 @@ class BoolOp : public BoolExpr
 {
 public:
 	enum OpCode { AND, OR, NOT };
+
 	BoolOp(OpCode o, BoolExpr* lop, BoolExpr* rop) :
 		operation{ o }, left{ lop }, right{ rop } {}
 	BoolOp(const BoolOp& other) = default;
 	~BoolOp() = default;
 	BoolOp& operator=(const BoolOp& other) = default;
 
-	// metodi di accesso
+	void accept(Visitor* v) override;
+
 	OpCode getOp() const { return operation; }
 	BoolExpr* getLeft() const { return left; }
 	BoolExpr* getRight() const
@@ -66,14 +68,15 @@ public:
 			return nullptr;
 		return right;
 	}
-
-	void accept(Visitor* v) override;
 private:
 	OpCode operation;
 	BoolExpr* left;
 	BoolExpr* right;
 };
 
+/**
+ * Rappresenta una costante booleana (true/false)
+ */
 class BoolConst : public BoolExpr
 {
 public:
