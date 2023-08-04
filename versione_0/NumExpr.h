@@ -72,7 +72,8 @@ private:
 class Variable : public NumExpr
 {
 public:
-	Variable(int v, std::string var_id) : name{ var_id } {}
+	Variable(int v, const std::string& var_id) : name{ var_id },
+		value{v} {}
 	Variable(const Variable& other) = default;
 	~Variable() = default;
 
@@ -82,7 +83,7 @@ public:
 private:
 	// il valore direi che non serve, perché viene memorizzato
 	// all'interno del visitor di esecuzione in fase di esecuzione
-	// int value;
+	int value;
 	std::string name;
 };
 
