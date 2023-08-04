@@ -101,6 +101,7 @@ private:
  * ad essa un valore ottenuto in input da terminale.
  *
  * Possono verificarsi gli errori:
+ * - la dichiarazione non è sintatticamente corretta
  * - l'istruzione non è sintatticamente corretta
  * - id_variabile è una parola chiave
  * - viene inserito da console un valore illecito
@@ -156,7 +157,18 @@ private:
 };
 
 /*
- * dopo
+ * PRINT-Statement
+ * 
+ * Corrisponde a:
+ * (PRINT num_expr)
+ * 
+ * Stampa su terminale il valore risultante dall'espressione numerica
+ * 
+ * Possono verificarsi gli errori:
+ * - la num_expr non è sintatticamente corretta
+ * - la num_expr contiene variabili non definite in precedenza
+ * - la num_expr, se eseguita, contiene errori semantici (ad
+ *   esempio divisione per 0)
  */
 class PrintStmt : public Statement
 {
