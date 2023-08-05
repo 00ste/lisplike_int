@@ -19,7 +19,8 @@ public:
 	
 	void accept(Visitor* v);
 	
-	void appendStatement(Statement* statement) {
+	void appendStatement(Statement* statement)
+	{
 		statements.push_back(statement);
 	}
 	const std::vector<Statement*>& getStatements() const

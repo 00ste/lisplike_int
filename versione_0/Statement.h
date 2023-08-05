@@ -1,13 +1,14 @@
 #ifndef STATEMENT_H
 #define STATEMENT_H
 
-#include "Block.h"
 #include "NumExpr.h"
 #include "BoolExpr.h"
 
 // Visitor include già Statement, quindi Statement non può includere
 // a sua volta Visitor, ma la classe deve comunque essere dichiarata
 class Visitor;
+// Stesso per Block
+class Block;
 
 /*
  * Statement generico all'interno del programma

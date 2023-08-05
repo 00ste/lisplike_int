@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\code\cpp\test_progetto\x64\Debug\versione_0.exe</FullPath>
+      <FullPath>C:\code\vs22_cpp\lisplike_int\x64\Debug\versione_0.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

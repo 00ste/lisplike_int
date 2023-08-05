@@ -70,18 +70,18 @@ struct UndefinedReferenceError : std::runtime_error
 };
 
 /**
- * UndefinedReferenceError
+ * MathError
  *
- * Errore di riferimento a una variabile non definita.
+ * Errore matematico (divisione per zero).
  *
  * ES: (PRINT a)
  *            ^!!
  * è un errore di sintassi perché a non è stata definita da SET o INPUT
  */
-struct UndefinedReferenceError : std::runtime_error
+struct MathError : std::runtime_error
 {
-	UndefinedReferenceError(const char* msg) : std::runtime_error(msg) {}
-	UndefinedReferenceError(std::string msg) : std::runtime_error(msg.c_str()) {}
+	MathError(const char* msg) : std::runtime_error(msg) {}
+	MathError(std::string msg) : std::runtime_error(msg.c_str()) {}
 };
 
 /*

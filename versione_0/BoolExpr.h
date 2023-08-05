@@ -80,7 +80,7 @@ private:
 class BoolConst : public BoolExpr
 {
 public:
-	BoolConst(int v) : value{ v } {}
+	BoolConst(bool v) : value{ v } {}
 	BoolConst(const BoolConst& other) = default;
 	~BoolConst() {}
 	BoolConst& operator=(const BoolConst& other) = default;
