@@ -1,6 +1,13 @@
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+
+#include "Exceptions.h"
+#include "Tokenizer.h"
+#include "Token.h"
 
 int main(int argc, char* argv[])
 {
@@ -29,10 +36,36 @@ int main(int argc, char* argv[])
 	}
 	
 	// lettura dell'intero file in una stringa
-	
+	std::stringstream temp{};
+	while (!inputFile.eof())
+	{
+		std::cout << inputFile.get();
+		temp << inputFile.get();
+	}
+	inputFile.close();
 
 	/*
 	 * TOKENIZZAZIONE
 	 */
-	
+	Tokenizer tokenize;
+	std::vector<Token> inputTokens;
+	try
+	{
+		inputTokens = tokenize(temp.str());
+		std::cout << "Tokens: ";
+		for (Token token : inputTokens)
+			std::cout << Token::tagToStr(token.tag) << " ";
+	}
+	catch (LexicalError e)
+	{
+		std::cerr << "Lexical Error" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+	catch (std::exception e)
+	{
+		std::cerr << "Generic Error" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
 }

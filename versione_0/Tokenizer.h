@@ -14,6 +14,14 @@ public:
 private:
 	void tokenizeInputText(std::string inputText,
 		std::vector<Token>& inputTokens);
+
+	int isKeyword(std::string word);
+
+	std::vector<std::string> keywords = {
+		"BLOCK", "IF", "WHILE", "INPUT", "SET", "PRINT",
+		"ADD", "SUB", "MUL", "DIV", "NUM", "VAR", "GT",
+		"LT", "EQ", "AND", "OR", "NOT", "TRUE", "FALSE"
+	};
 };
 
 #endif

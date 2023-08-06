@@ -134,6 +134,8 @@
     <ClCompile Include="NodeManager.h" />
     <ClCompile Include="NumExpr.cpp" />
     <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="Tokenizer.h" />
     <ClCompile Include="Visitor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +144,7 @@
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="NumExpr.h" />
     <ClInclude Include="Statement.h" />
+    <ClInclude Include="Token.h" />
     <ClInclude Include="Visitor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
