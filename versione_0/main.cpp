@@ -8,6 +8,8 @@
 #include "Exceptions.h"
 #include "Tokenizer.h"
 #include "Token.h"
+#include "NodeManager.h"
+#include "Parser.h"
 
 int main(int argc, char* argv[])
 {
@@ -66,4 +68,9 @@ int main(int argc, char* argv[])
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}
+
+	/*
+	 * PARSING
+	 */
+
 }

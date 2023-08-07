@@ -6,6 +6,11 @@
 
 #include "Token.h"
 
+
+/**
+ * Tokenizer si occupa di produrre un vettore di Token a
+ * partire da un file di testo sottoforma di stringa unica.
+ */
 class Tokenizer
 {
 public:
