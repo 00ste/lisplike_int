@@ -37,12 +37,10 @@ int main(int argc, char* argv[])
 	
 	// lettura dell'intero file in una stringa
 	std::stringstream temp{};
-	while (!inputFile.eof())
-	{
-		std::cout << inputFile.get();
-		temp << inputFile.get();
-	}
+	temp << inputFile.rdbuf();
 	inputFile.close();
+
+	std::cout << "File read: " << std::endl << temp.str() << std::endl;
 
 	/*
 	 * TOKENIZZAZIONE
@@ -58,7 +56,7 @@ int main(int argc, char* argv[])
 	}
 	catch (LexicalError e)
 	{
-		std::cerr << "Lexical Error" << std::endl;
+		std::cerr << "Lexical Error:" << std::endl;
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}

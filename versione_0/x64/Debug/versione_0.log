@@ -1,2 +1,3 @@
-﻿  main.cpp
+﻿  Tokenizer.cpp
+C:\code\vs22_cpp\lisplike_int\versione_0\Token.h(37): warning C4715: 'Token::strToTag': not all control paths return a value
   versione_0.vcxproj -> C:\code\vs22_cpp\lisplike_int\x64\Debug\versione_0.exe
