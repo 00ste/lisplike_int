@@ -133,6 +133,7 @@
     <ClCompile Include="NodeManager.cpp" />
     <ClCompile Include="NodeManager.h" />
     <ClCompile Include="NumExpr.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Statement.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="Tokenizer.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="BoolExpr.h" />
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="NumExpr.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Statement.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Visitor.h" />

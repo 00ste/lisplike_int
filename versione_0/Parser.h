@@ -3,6 +3,9 @@
 
 #include "NodeManager.h"
 #include "Block.h"
+#include "Statement.h"
+#include "NumExpr.h"
+#include "BoolExpr.h"
 #include "Token.h"
 
 /**
@@ -13,18 +16,17 @@
 class Parser
 {
 public:
-	Parser(NodeManager& manager) : nm{ manager },
-		program{} {}
-	Block* getProgram() const { return program; }
+	Parser(NodeManager* manager) : nm{ manager } {}
 	Block* operator()(const std::vector<Token>& tokenStream);
 private:
-	NodeManager& nm;
-	Block* program;
+	NodeManager* nm;
 
-	void parseBlock(std::vector<Token>::const_iterator& i);
-	void parseStatement(std::vector<Token>::const_iterator& i);
-	void parseNumExpr(std::vector<Token>::const_iterator& i);
-	void parseBoolExpr(std::vector<Token>::const_iterator& i);
+	void throwSyntaxError(Token failedToken);
+
+	Block* parseBlock(std::vector<Token>::const_iterator& i);
+	Statement* parseStatement(std::vector<Token>::const_iterator& i);
+	NumExpr* parseNumExpr(std::vector<Token>::const_iterator& i);
+	BoolExpr* parseBoolExpr(std::vector<Token>::const_iterator& i);
 };
 
 #endif

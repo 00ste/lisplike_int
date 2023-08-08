@@ -10,6 +10,8 @@
 #include "Token.h"
 #include "NodeManager.h"
 #include "Parser.h"
+#include "Block.h"
+#include "Visitor.h"
 
 int main(int argc, char* argv[])
 {
@@ -72,5 +74,15 @@ int main(int argc, char* argv[])
 	/*
 	 * PARSING
 	 */
+	NodeManager nm;
+	Parser parse{ nm };
 
+	Block* program = parse(inputTokens);
+
+	/*
+	 * ESECUZIONE
+	 */
+	ExecutionVisitor ev{};
+
+	(*program).accept(&ev);
 }

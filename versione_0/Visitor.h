@@ -21,7 +21,7 @@ public:
 
 	virtual void visitOperator(Operator* operatorNode) = 0;
 	virtual void visitNumber(Number* numberNode) = 0;
-	virtual void visitVariable(Variable* variableNode) = 0;
+	// virtual void visitVariable(Variable* variableNode) = 0;
 
 	virtual void visitRelOp(RelOp* relOpNode) = 0;
 	virtual void visitBoolConst(BoolConst* boolConstNode) = 0;
@@ -41,6 +41,7 @@ public:
 class ExecutionVisitor : public Visitor
 {
 public:
+	// uso costruttori e distruttore di default
 	void visitBlock(Block* blockNode) override;
 
 	void visitPrintStmt(PrintStmt* printStmtNode) override;
