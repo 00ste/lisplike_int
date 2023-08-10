@@ -2,6 +2,7 @@
 #define BOOL_EXPR_H
 
 #include "NumExpr.h"
+#include "Token.h"
 
 // Visitor include già BoolExpr, quindi BoolExpr non può includere
 // a sua volta Visitor, ma la classe deve comunque essere dichiarata
@@ -37,6 +38,8 @@ public:
 	OpCode getOp() const { return operation; }
 	NumExpr* getLeft() const { return left; }
 	NumExpr* getRight() const { return right; }
+
+	static OpCode tokenToOpCode(const Token& t);
 private:
 	OpCode operation;
 	NumExpr* left;
@@ -45,7 +48,7 @@ private:
 
 /*
  * Rappresenta un'operazione booleana (AND, OR, NOT)
- * tra due espressioni numeriche
+ * tra due espressioni booleane
  */
 class BoolOp : public BoolExpr
 {
@@ -68,6 +71,8 @@ public:
 			return nullptr;
 		return right;
 	}
+
+	static OpCode tokenToOpCode(const Token& t);
 private:
 	OpCode operation;
 	BoolExpr* left;

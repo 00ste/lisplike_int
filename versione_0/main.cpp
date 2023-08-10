@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	/*
 	 * PARSING
 	 */
-	NodeManager nm;
+	NodeManager* nm{};
 	Parser parse{ nm };
 
 	Block* program = parse(inputTokens);
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 	/*
 	 * ESECUZIONE
 	 */
-	ExecutionVisitor ev{};
+	ExecutionVisitor* ev{};
 
-	(*program).accept(&ev);
+	(*program).accept(ev);
 }

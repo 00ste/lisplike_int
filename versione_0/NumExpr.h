@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Token.h"
+
 // Visitor include già NumExpr, quindi NumExpr non può includere
 // a sua volta Visitor, ma la classe deve comunque essere dichiarata
 class Visitor;
@@ -36,6 +38,8 @@ public:
 	OpCode getOp() const { return operation; }
 	NumExpr* getLeft() const { return left; }
 	NumExpr* getRight() const { return right; }
+
+	static OpCode TokenToOpCode(const Token& t);
 private:
 	OpCode operation;
 	NumExpr* left;

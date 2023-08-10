@@ -89,12 +89,14 @@ RelOp* NodeManager::makeRelOp(RelOp::OpCode o, NumExpr* lop, NumExpr* rop)
 	boolExprNodes.push_back(x);
 	return x;
 }
+
 BoolOp* NodeManager::makeBoolOp(BoolOp::OpCode o, BoolExpr* lop, BoolExpr* rop)
 {
 	BoolOp* x = new BoolOp(o, lop, rop);
 	boolExprNodes.push_back(x);
 	return x;
 }
+
 BoolConst* NodeManager::makeBoolConst(bool v)
 {
 	BoolConst* x = new BoolConst(v);

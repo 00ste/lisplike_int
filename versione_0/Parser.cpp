@@ -2,6 +2,7 @@
 #include <iterator>
 #include <string>
 #include <sstream>
+#include <exception>
 
 #include "Parser.h"
 #include "Block.h"
@@ -23,16 +24,36 @@
 Block* Parser::operator()(const std::vector<Token>& tokenStream)
 {
     auto tokenItr = tokenStream.begin();
-    
-    if ((*tokenItr++).tag == Token::LP)
+    Block* program;
+
+    // Nella maggior parte dei casi un programma è composto da
+    // un Blocco di più statement, quindi si prova prima questo
+    // caso.
+    try
     {
-        Block* program = parseBlock(tokenItr);
+        program = parseBlock(tokenItr);
         return program;
     }
-    else
-        throwSyntaxError(*tokenItr);
+    catch (std::exception e)
+    {
+
+    }
+    // Tuttavia sono ammessi anche programmi composti da un
+    // singolo Statement, che non fanno parte di un Block.
+    // La funzione restituisce comunque un Block, in
+    // memoria un singolo Statement viene comunque
+    // memorizzato all'interno di un Block.
+    program = nm->makeBlock();
+    program->appendStatement(parseStatement(tokenItr));
+    return program;
 }
 
+/**
+ * throwSyntaxError
+ * 
+ * Funzione di utilità per lanciare un errore di sintassi,
+ * l'eccezione specifica il token che l'ha scatenata.
+ */
 void Parser::throwSyntaxError(Token failedToken)
 {
     std::stringstream errorMessage{};
@@ -49,21 +70,27 @@ void Parser::throwSyntaxError(Token failedToken)
  */
 Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
 {
-    Block* block = (*nm).makeBlock();
+    Block* block = nm->makeBlock();
+
+    // controlla LP
+    if (itr->tag != Token::LP)
+        throwSyntaxError(*itr);
+    itr++;
     
     // controlla BLOCK
-    if ((*itr).tag != Token::BLOCK)
+    if (itr->tag != Token::BLOCK)
         throwSyntaxError(*itr);
     itr++;
 
     // controlla ogni statement che inizia con LP
-    while ((*itr).tag == Token::LP)
+    while (itr->tag == Token::LP)
     {
-        (*block).appendStatement(parseStatement(itr));
+        block->appendStatement(parseStatement(itr));
     }
 
-    // controlla l'ultima RP
-    if ((*itr).tag != Token::RP)
+    // controlla l'ultima RP e porta l'interatore
+    // sul Token successivo
+    if (itr->tag != Token::RP)
         throwSyntaxError(*itr);
     itr++;
 
@@ -93,18 +120,16 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     {
         itr++;
 
-        // Controllo la condizione (BoolExpr), comprese
-        // LP che la precede e RP che la segue, l'iteratore
+        // Controllo la condizione (BoolExpr), l'iteratore
         // è già sul Token successivo
         BoolExpr* condition = parseBoolExpr(itr);
 
-        // Controllo il primo Block, comprese LP che la
-        // precede e RP che la segue, l'iteratore è già
+        // Controllo il primo Block, l'iteratore è già
         // sul Token successivo
         Block* blockIf = parseBlock(itr);
 
-        // Controllo il secondo Block e la RP che lo
-        // segue, l'iteratore è già sul Token successivo
+        // Controllo il secondo Block, l'iteratore è
+        // già sul Token successivo
         Block* blockElse = parseBlock(itr);
 
         // Controllo l'ultima RP che conclude lo
@@ -123,13 +148,11 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     {
         itr++;
 
-        // Controllo la condizione (BoolExpr), comprese
-        // LP che la precede e RP che la segue,
+        // Controllo la condizione (BoolExpr),
         // l'iteratore è già sul Token successivo
         BoolExpr* condition = parseBoolExpr(itr);
 
-        // Controllo il primo Block, comprese LP che la
-        // precede e RP che la segue, l'iteratore è già
+        // Controllo il primo Block, l'iteratore è già
         // sul Token successivo
         Block* block = parseBlock(itr);
 
@@ -179,19 +202,8 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         Variable* variable = nm->makeVariable(-17,
             itr->word);
 
-        // Controllo RP che segue VAR
-        if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
-        itr++;
-
-        // Controllo LP che segue NumExpr
-        if (itr->tag != Token::LP)
-            throwSyntaxError(*itr);
-        itr++;
-
-        // Controllo NumExpr e la RP che la segue,
-        // l'iteratore si trova già sul token
-        // successivo
+        // Controllo NumExpr, l'iteratore si trova
+        // già sul token successivo
         NumExpr* expression = parseNumExpr(itr);
 
         // Controllo l'ultima RP che conclude lo
@@ -204,19 +216,13 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         return nm->makeSetStmt(variable, expression);
     }
 
-    // PrintStmt: (PRINT) LP <NumExpr> RP RP
+    // PrintStmt: PRINT <NumExpr> RP
     if (itr->tag == Token::PRINT)
     {
         itr++;
 
-        // Controllo LP che precede NumExpr
-        if (itr->tag != Token::LP)
-            throwSyntaxError(*itr);
-        itr++;
-
-        // Controllo NumExpr e la RP che la segue,
-        // l'iteratore si trova già sul token
-        // successivo
+        // Controllo NumExpr, l'iteratore si trova
+        // già sul token successivo
         NumExpr* expression = parseNumExpr(itr);
 
         // Controllo l'ultima RP che conclude lo
@@ -239,18 +245,141 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
  * 
  * Effettua il parsing di una NumExpr (Variable, Operator,
  * Number). I token per ogni Statment devono essere:
- * - Variable:  (LP) VAR RP
- * - Number:    (LP) NUM RP
- * - Operator:  (LP) <opCode> <NumExpr> RP LP <NumExpr> RP
+ * - Number:    NUM
+ * - Variable:  VAR
+ * - Operator:  LP <opCode> <NumExpr> <NumExpr> RP
  */
-void Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
+NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
 {
-    if (itr->tag == Token::VAR)
-    {
+    // Number
+    if (itr->tag == Token::NUM)
+        return nm->makeNumber(std::stoi(itr->word));
 
-    }
+    // Variable
+    if (itr->tag == Token::VAR)
+        return nm->makeVariable(-17, itr->word);
+
+    // Operator
+
+    // Controllo LP che apre ogni operazione
+    if (itr->tag != Token::LP)
+        throwSyntaxError(*itr);
+    itr++;
+
+    // Controllo <opCode> e creo l'OpCode
+    // corrispondente
+    if ((itr->tag != Token::ADD) &&
+        (itr->tag != Token::SUB) &&
+        (itr->tag != Token::MUL) &&
+        (itr->tag != Token::DIV))
+        throwSyntaxError(*itr);
+    Operator::OpCode opCode;
+    opCode = Operator::TokenToOpCode(*itr);
+    itr++;
+
+    // Controllo NumExpr, l'iteratore si trova
+    // già sul token successivo
+    NumExpr* opLeft = parseNumExpr(itr);
+    
+    // Controllo NumExpr, l'iteratore si trova
+    // già sul token successivo
+    NumExpr* opRight = parseNumExpr(itr);
+
+    // Controllo RP che chiude ogni operazione
+    if (itr->tag != Token::RP)
+        throwSyntaxError(*itr);
+    itr++;
+
+    return nm->makeOperator(opCode, opLeft, opRight);
 }
 
-void Parser::parseBoolExpr(std::vector<Token>::const_iterator& i)
+/**
+ * parseBoolExpr
+ *
+ * Effettua il parsing di una BoolExpr (BoolConst, BoolOp,
+ * RelOp). I token per ogni Statment devono essere:
+ * - BoolConst: TRUE / FALSE
+ * - BoolOp:    LP <opCode> <BoolExpr> <BoolExpr> RP
+ * - RelOp:     LP <opCode> <NumExpr> <NumExpr> RP
+ */
+BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 {
+    // BoolConst
+    if (itr->tag == Token::TRUE)
+        return nm->makeBoolConst(true);
+    if (itr->tag == Token::FALSE)
+        return nm->makeBoolConst(false);
+
+    // BoolOp e RelOp
+
+    // Controllo LP che apre ogni operazione
+    if (itr->tag != Token::LP)
+        throwSyntaxError(*itr);
+    itr++;
+
+    // BoolOp:  AND <BoolExpr> <BoolExpr> RP
+    //          OR <BoolExpr> <BoolExpr> RP
+    if ((itr->tag == Token::AND) ||
+        (itr->tag == Token::OR))
+    {
+        // opCode
+        BoolOp::OpCode opCode;
+        opCode = BoolOp::tokenToOpCode(*itr);
+        itr++;
+
+        // Primo operando
+        BoolExpr* opLeft = parseBoolExpr(itr);
+
+        // Secondo operando
+        BoolExpr* opRight = parseBoolExpr(itr);
+
+        // Controllo RP che chiude ogni operazione
+        if (itr->tag != Token::RP)
+            throwSyntaxError(*itr);
+        itr++;
+
+        return nm->makeBoolOp(opCode, opLeft, opRight);
+    }
+
+    // BoolOp:  NOT <BoolExpr> RP
+    if (itr->tag == Token::NOT)
+    {
+        itr++;
+
+        // Operando
+        BoolExpr* op = parseBoolExpr(itr);
+
+        // Controllo RP che chiude ogni operazione
+        if (itr->tag != Token::RP)
+            throwSyntaxError(*itr);
+        itr++;
+
+        return nm->makeBoolOp(BoolOp::NOT, op, nullptr);
+    }
+
+    // RelOp:   LT <NumExpr> <NumExpr> RP
+    //          GT <NumExpr> <NumExpr> RP
+    //          EQ <NumExpr> <NumExpr> RP
+    if ((itr->tag == Token::LT) ||
+        (itr->tag == Token::GT) ||
+        (itr->tag == Token::EQ))
+    {
+        // opCode
+        RelOp::OpCode opCode;
+        opCode = RelOp::tokenToOpCode(*itr);
+        itr++;
+
+        // Primo operando
+        NumExpr* opLeft = parseNumExpr(itr);
+
+        // Secondo operando
+        NumExpr* opRight = parseNumExpr(itr);
+
+        // Controllo RP che chiude ogni operazione
+        if (itr->tag != Token::RP)
+            throwSyntaxError(*itr);
+        itr++;
+
+        return nm->makeRelOp(opCode, opLeft, opRight);
+    }
 }

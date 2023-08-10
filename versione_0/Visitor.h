@@ -21,7 +21,7 @@ public:
 
 	virtual void visitOperator(Operator* operatorNode) = 0;
 	virtual void visitNumber(Number* numberNode) = 0;
-	// virtual void visitVariable(Variable* variableNode) = 0;
+	virtual void visitVariable(Variable* variableNode) = 0;
 
 	virtual void visitRelOp(RelOp* relOpNode) = 0;
 	virtual void visitBoolConst(BoolConst* boolConstNode) = 0;
