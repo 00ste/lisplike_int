@@ -2,6 +2,7 @@
 #define MANAGER_H
 
 #include <vector>
+#include <iostream>
 
 #include "Block.h"
 #include "Statement.h"
@@ -16,7 +17,8 @@
 class NodeManager
 {
 public:
-	NodeManager() = default;
+	NodeManager() : blockNodes{}, statementNodes{},
+		numExprNodes{}, boolExprNodes{} {}
 	NodeManager(const NodeManager& other) = delete;
 	~NodeManager() { clearMemory(); }
 

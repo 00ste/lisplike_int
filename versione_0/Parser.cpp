@@ -4,18 +4,40 @@
 #include <sstream>
 #include <exception>
 
+#include <iostream>
+
 #include "Parser.h"
 #include "Block.h"
+#include "Statement.h"
+#include "NumExpr.h"
+#include "BoolExpr.h"
+#include "NodeManager.h"
 #include "Token.h"
 #include "Exceptions.h"
 
 
+
+/**
+ * throwSyntaxError
+ * 
+ * Funzione di utilità per lanciare un errore di sintassi,
+ * l'eccezione specifica il token che l'ha scatenata.
+ */
+void Parser::throwSyntaxError(Token failedToken)
+{
+    std::cout << "Eccezione! su " << Token::tagToStr(failedToken.tag) << std::endl;
+    std::stringstream errorMessage{};
+    errorMessage << "error while parsing at token";
+    errorMessage << Token::tagToStr(failedToken.tag);
+    throw LexicalError(errorMessage.str());
+}
+
 /**
  * operator()
- * 
+ *
  * Effettua il parsing di un vettore di Token, e restituisce
  * il nodo iniziale della struttura dati contenente il programma.
- * 
+ *
  * Per effettuare il parsing di Block, Statement, NumExpr e
  * BoolExpr vengono chiamati dei metodi appositi.
  * Ogni metodo che effettua il parsing (incluso operator()) legge
@@ -23,6 +45,7 @@
  */
 Block* Parser::operator()(const std::vector<Token>& tokenStream)
 {
+    std::cout << "PAR: Inizio parsing" << std::endl;
     auto tokenItr = tokenStream.begin();
     Block* program;
 
@@ -36,7 +59,7 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
     }
     catch (std::exception e)
     {
-
+        std::cout << "PAR: Il programma è un solo Statement" << std::endl;
     }
     // Tuttavia sono ammessi anche programmi composti da un
     // singolo Statement, che non fanno parte di un Block.
@@ -49,20 +72,6 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
 }
 
 /**
- * throwSyntaxError
- * 
- * Funzione di utilità per lanciare un errore di sintassi,
- * l'eccezione specifica il token che l'ha scatenata.
- */
-void Parser::throwSyntaxError(Token failedToken)
-{
-    std::stringstream errorMessage{};
-    errorMessage << "error while parsing at token";
-    errorMessage << Token::tagToStr(failedToken.tag);
-    throw LexicalError(errorMessage.str());
-}
-
-/**
  * parseBlock
  * 
  * Effettua il parsing di un Block, i token devono essere:
@@ -70,6 +79,7 @@ void Parser::throwSyntaxError(Token failedToken)
  */
 Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
 {
+    std::cout << "PAR: Dentro parseBlock" << std::endl;
     Block* block = nm->makeBlock();
 
     // controlla LP
@@ -238,6 +248,11 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     // Se non è nessuno degli Statement già controllati,
     // c'è un errore di sintassi
     throwSyntaxError(*itr);
+
+    // Per evitare il warning. In realtà questo codice
+    // è irraggiungibile perché il metodo sopra lancia
+    // un'eccezione, ma il compilatore non lo sa.
+    return nullptr;
 }
 
 /**
@@ -382,4 +397,13 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 
         return nm->makeRelOp(opCode, opLeft, opRight);
     }
+
+    // Se non è nessuno degli OpCode già controllati,
+    // c'è un errore di sintassi
+    throwSyntaxError(*itr);
+
+    // Per evitare il warning. In realtà questo codice
+    // è irraggiungibile perché il metodo sopra lancia
+    // un'eccezione, ma il compilatore non lo sa.
+    return nullptr;
 }

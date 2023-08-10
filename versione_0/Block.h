@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iterator>
+
 #include "Statement.h"
 
 // Visitor include già Block, quindi Block non può includere
@@ -13,7 +14,7 @@ class Visitor;
 class Block
 {
 public:
-	Block() {};
+	Block() = default;
 	Block(const Block& other) = delete;
 	~Block() = default;
 	

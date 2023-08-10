@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 		inputTokens = tokenize(temp.str());
 		std::cout << "Tokens: ";
 		for (Token token : inputTokens)
-			std::cout << Token::tagToStr(token.tag) << " ";
+			std::cout << token.word << " ";
 	}
 	catch (LexicalError e)
 	{
@@ -74,15 +74,36 @@ int main(int argc, char* argv[])
 	/*
 	 * PARSING
 	 */
-	NodeManager* nm{};
-	Parser parse{ nm };
+	Block* program;
+	try
+	{
+		std::cout << std::endl << "Inizio parsing..." << std::endl;
+		NodeManager* nm{};
+		Parser parse{ nm };
+		program = parse(inputTokens);
+	}
+	catch (SyntaxError e)
+	{
+		std::cerr << "Syntax Error:" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+	catch (std::exception e)
+	{
+		std::cerr << "Generic Error" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
 
-	Block* program = parse(inputTokens);
+	std::cout << "Parsing OK" << std::endl;
 
 	/*
 	 * ESECUZIONE
 	 */
+	std::cout << "Inizio esecuzione..." << std::endl;
 	ExecutionVisitor* ev{};
 
-	(*program).accept(ev);
+	program->accept(ev);
+	std::cout << "Esecuzione terminata!" << std::endl;
+	return EXIT_SUCCESS;
 }

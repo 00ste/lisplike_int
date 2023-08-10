@@ -26,7 +26,7 @@ public:
 class Operator : public NumExpr
 {
 public:
-	enum OpCode { PLUS, MINUS, TIMES, DIV };
+	enum OpCode { PLUS, MINUS, TIMES, DIV, ERR };
 
 	Operator(OpCode o, NumExpr* lop, NumExpr* rop) :
 		operation{ o }, left{ lop }, right{ rop } {}

@@ -1,5 +1,10 @@
-#include "NodeManager.h"
+#include <iostream>
 
+#include "NodeManager.h"
+#include "Block.h"
+#include "Statement.h"
+#include "NumExpr.h"
+#include "BoolExpr.h"
 
 /**
  * Dealloca tutti i nodi da tutte le liste e ripulisce la
@@ -29,7 +34,9 @@ void NodeManager::clearMemory()
 Block* NodeManager::makeBlock()
 {
 	Block* x = new Block();
+	std::cout << "a" << std::endl;
 	blockNodes.push_back(x);
+	std::cout << "b" << std::endl;
 	return x;
 }
 

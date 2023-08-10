@@ -52,7 +52,7 @@ public:
 
 	void visitOperator(Operator* operatorNode) override;
 	void visitNumber(Number* numberNode) override;
-	// void visitVariable(Variable* variableNode) override;
+	void visitVariable(Variable* variableNode) override;
 
 	void visitRelOp(RelOp* relOpNode) override;
 	void visitBoolConst(BoolConst* boolConstNode) override;

@@ -25,7 +25,7 @@ public:
 class RelOp : public BoolExpr
 {
 public:
-	enum OpCode { GT, LT, EQ };
+	enum OpCode { GT, LT, EQ, ERR };
 
 	RelOp(OpCode o, NumExpr* lop, NumExpr* rop) :
 		operation{ o }, left{ lop }, right{ rop } {}
@@ -53,7 +53,7 @@ private:
 class BoolOp : public BoolExpr
 {
 public:
-	enum OpCode { AND, OR, NOT };
+	enum OpCode { AND, OR, NOT, ERR };
 
 	BoolOp(OpCode o, BoolExpr* lop, BoolExpr* rop) :
 		operation{ o }, left{ lop }, right{ rop } {}

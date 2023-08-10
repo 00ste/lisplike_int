@@ -1,6 +1,8 @@
 #include "Visitor.h"
 #include "Block.h"
 #include "Statement.h"
+#include "NumExpr.h"
+#include "BoolExpr.h"
 
 #include <iostream>
 
@@ -196,6 +198,10 @@ void ExecutionVisitor::visitOperator(Operator* operatorNode)
 void ExecutionVisitor::visitNumber(Number* numberNode)
 {
 	intStack.push_back(numberNode->getValue());
+}
+
+void ExecutionVisitor::visitVariable(Variable* variableNode)
+{
 }
 
 /**

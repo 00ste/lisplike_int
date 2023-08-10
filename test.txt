@@ -1,5 +1,1 @@
-(WHILE 25
-	(LT i 10) (BLOCK
-	(SET j (ADD i 1))
-	(IF (LT j i) (SUB i j) (MUL i 2))
-)
+(PRINT IF)
