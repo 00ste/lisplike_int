@@ -1,1 +1,4 @@
-(PRINT IF)
+(BLOCK
+	(INPUT a 19)
+	(PRINT a)
+)

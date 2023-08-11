@@ -34,9 +34,7 @@ void NodeManager::clearMemory()
 Block* NodeManager::makeBlock()
 {
 	Block* x = new Block();
-	std::cout << "a" << std::endl;
 	blockNodes.push_back(x);
-	std::cout << "b" << std::endl;
 	return x;
 }
 

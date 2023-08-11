@@ -25,11 +25,10 @@
  */
 void Parser::throwSyntaxError(Token failedToken)
 {
-    std::cout << "Eccezione! su " << Token::tagToStr(failedToken.tag) << std::endl;
     std::stringstream errorMessage{};
-    errorMessage << "error while parsing at token";
+    errorMessage << "error while parsing at token: ";
     errorMessage << Token::tagToStr(failedToken.tag);
-    throw LexicalError(errorMessage.str());
+    throw SyntaxError(errorMessage.str());
 }
 
 /**
@@ -40,12 +39,10 @@ void Parser::throwSyntaxError(Token failedToken)
  *
  * Per effettuare il parsing di Block, Statement, NumExpr e
  * BoolExpr vengono chiamati dei metodi appositi.
- * Ogni metodo che effettua il parsing (incluso operator()) legge
- * anche la parentesi relativa al prossimo Token.
  */
 Block* Parser::operator()(const std::vector<Token>& tokenStream)
 {
-    std::cout << "PAR: Inizio parsing" << std::endl;
+    std::cout << "PAR: Begin parsing" << std::endl;
     auto tokenItr = tokenStream.begin();
     Block* program;
 
@@ -55,11 +52,18 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
     try
     {
         program = parseBlock(tokenItr);
+        std::cout << "PAR: BLOCK Program ended, returning" << std::endl;
         return program;
     }
+    // Problema: se il programma è un Block, le eccezioni non arrivano
+    // mai perché vengono intercettate da questo catch, dopodiché il
+    // Parser ricomincia da capo credendo che il programma sia un solo
+    // Statement, e fallisce
     catch (std::exception e)
     {
-        std::cout << "PAR: Il programma è un solo Statement" << std::endl;
+        std::cout << "PAR: The program is a single Statement" << std::endl;
+        // L'iteratore ricomincia da capo
+        tokenItr = tokenStream.begin();
     }
     // Tuttavia sono ammessi anche programmi composti da un
     // singolo Statement, che non fanno parte di un Block.
@@ -79,8 +83,8 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
  */
 Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
 {
-    std::cout << "PAR: Dentro parseBlock" << std::endl;
-    Block* block = nm->makeBlock();
+    std::cout << "PAR: Inside parseBlock" << std::endl;
+    Block* block;
 
     // controlla LP
     if (itr->tag != Token::LP)
@@ -92,9 +96,14 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
         throwSyntaxError(*itr);
     itr++;
 
+    std::cout << "PAR: BLOCK OK" << std::endl;
+
+    block = nm->makeBlock();
+
     // controlla ogni statement che inizia con LP
     while (itr->tag == Token::LP)
     {
+        std::cout << "PAR: Parsing new statement inside Block..." << std::endl;
         block->appendStatement(parseStatement(itr));
     }
 
@@ -104,6 +113,7 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
         throwSyntaxError(*itr);
     itr++;
 
+    std::cout << "PAR: Block ended" << std::endl;
     return block;
 }
 
@@ -120,9 +130,13 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
  */
 Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
 {
+    std::cout << "PAR: Inside parseStatement" << std::endl;
     // Controllo LP che apre lo statement
     if (itr->tag != Token::LP)
         throwSyntaxError(*itr);
+    itr++;
+
+    std::cout << "PAR: LP OK" << std::endl;
 
     // Controllo di che Statement si tratta:
     // IfStmt:    IF <BoolExpr> <Block> <Block> RP
@@ -229,6 +243,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     // PrintStmt: PRINT <NumExpr> RP
     if (itr->tag == Token::PRINT)
     {
+        std::cout << "PAR: PRINT Statement recognized" << std::endl;
         itr++;
 
         // Controllo NumExpr, l'iteratore si trova
@@ -244,6 +259,8 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
 
         return nm->makePrintStmt(expression);
     }
+
+    std::cout << "PAR: Unknown Statement" << std::endl;
     
     // Se non è nessuno degli Statement già controllati,
     // c'è un errore di sintassi
@@ -266,13 +283,28 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
  */
 NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
 {
+    std::cout << "PAR: Parsing NumExpr, received token " << Token::tagToStr(itr->tag) << std::endl;
     // Number
     if (itr->tag == Token::NUM)
-        return nm->makeNumber(std::stoi(itr->word));
+    {
+        std::cout << "PAR: Parsing Number, received word " << itr->word << std::endl;
+
+        // conversione creativa
+        std::stringstream buffer;
+        int value;
+        buffer << itr->word;
+        buffer >> value;
+
+        itr++;
+        return nm->makeNumber(value);
+    }
 
     // Variable
     if (itr->tag == Token::VAR)
+    {
+        itr++;
         return nm->makeVariable(-17, itr->word);
+    }
 
     // Operator
 
@@ -321,9 +353,16 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 {
     // BoolConst
     if (itr->tag == Token::TRUE)
+    {
+        itr++;
         return nm->makeBoolConst(true);
+    }
+        
     if (itr->tag == Token::FALSE)
+    {
+        itr++;
         return nm->makeBoolConst(false);
+    }
 
     // BoolOp e RelOp
 

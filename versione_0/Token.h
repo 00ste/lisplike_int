@@ -50,6 +50,8 @@ struct Token
 		if (s == SUB) return "SUB";
 		if (s == MUL) return "MUL";
 		if (s == DIV) return "DIV";
+		if (s == NUM) return "NUM";
+		if (s == VAR) return "VAR";
 		if (s == GT) return "GT";
 		if (s == LT) return "LT";
 		if (s == EQ) return "EQ";

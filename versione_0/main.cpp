@@ -1,16 +1,12 @@
 #include <iostream>
-#include <stdlib.h>
 #include <fstream>
 #include <sstream>
-#include <vector>
-#include <string>
 
-#include "Exceptions.h"
 #include "Tokenizer.h"
-#include "Token.h"
+#include "Exceptions.h"
+#include "Block.h"
 #include "NodeManager.h"
 #include "Parser.h"
-#include "Block.h"
 #include "Visitor.h"
 
 int main(int argc, char* argv[])
@@ -56,7 +52,7 @@ int main(int argc, char* argv[])
 		inputTokens = tokenize(temp.str());
 		std::cout << "Tokens: ";
 		for (Token token : inputTokens)
-			std::cout << token.word << " ";
+			std::cout << Token::tagToStr(token.tag) << " ";
 	}
 	catch (LexicalError e)
 	{
@@ -77,9 +73,9 @@ int main(int argc, char* argv[])
 	Block* program;
 	try
 	{
-		std::cout << std::endl << "Inizio parsing..." << std::endl;
-		NodeManager* nm{};
-		Parser parse{ nm };
+		std::cout << std::endl << "Begin parsing..." << std::endl;
+		NodeManager nm{};
+		Parser parse{ &nm };
 		program = parse(inputTokens);
 	}
 	catch (SyntaxError e)
@@ -100,10 +96,10 @@ int main(int argc, char* argv[])
 	/*
 	 * ESECUZIONE
 	 */
-	std::cout << "Inizio esecuzione..." << std::endl;
+	std::cout << "Begin execution..." << std::endl;
 	ExecutionVisitor* ev{};
 
 	program->accept(ev);
-	std::cout << "Esecuzione terminata!" << std::endl;
+	std::cout << "Execution terminated!" << std::endl;
 	return EXIT_SUCCESS;
 }
