@@ -1,4 +1,9 @@
 (BLOCK
-	(INPUT a 19)
-	(PRINT a)
+	(INPUT num)
+	(SET i 0)
+	(WHILE (LT i num)
+	(BLOCK
+		(PRINT i)
+		(SET i (ADD i 1))
+	))
 )

@@ -1,6 +1,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <string>
+
 #include "NodeManager.h"
 #include "Block.h"
 #include "Statement.h"
@@ -21,10 +23,11 @@ public:
 private:
 	NodeManager* nm;
 
-	void throwSyntaxError(Token failedToken);
+	void throwSyntaxError(Token failedToken, std::string expectedToken);
 
 	Block* parseBlock(std::vector<Token>::const_iterator& itr);
 	Statement* parseStatement(std::vector<Token>::const_iterator& itr);
+	Block* parseStmtBlock(std::vector<Token>::const_iterator& itr);
 	NumExpr* parseNumExpr(std::vector<Token>::const_iterator& itr);
 	BoolExpr* parseBoolExpr(std::vector<Token>::const_iterator& itr);
 };

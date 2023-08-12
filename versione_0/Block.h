@@ -4,6 +4,9 @@
 #include <vector>
 #include <iterator>
 
+// DEBUG
+#include <iostream>
+
 #include "Statement.h"
 
 // Visitor include già Block, quindi Block non può includere
@@ -22,7 +25,9 @@ public:
 	
 	void appendStatement(Statement* statement)
 	{
+		//std::cout << "BLK: appending Statement to Block " << this << std::endl;
 		statements.push_back(statement);
+		//std::cout << "BLK: Statements are now " << statements.size() << std::endl;
 	}
 	const std::vector<Statement*>& getStatements() const
 	{

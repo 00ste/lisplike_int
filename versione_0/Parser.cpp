@@ -23,11 +23,13 @@
  * Funzione di utilità per lanciare un errore di sintassi,
  * l'eccezione specifica il token che l'ha scatenata.
  */
-void Parser::throwSyntaxError(Token failedToken)
+void Parser::throwSyntaxError(Token failedToken,
+    std::string expectedToken)
 {
     std::stringstream errorMessage{};
-    errorMessage << "error while parsing at token: ";
+    errorMessage << "error while parsing at token ";
     errorMessage << Token::tagToStr(failedToken.tag);
+    errorMessage << ", " << expectedToken << " expected.";
     throw SyntaxError(errorMessage.str());
 }
 
@@ -42,37 +44,11 @@ void Parser::throwSyntaxError(Token failedToken)
  */
 Block* Parser::operator()(const std::vector<Token>& tokenStream)
 {
-    std::cout << "PAR: Begin parsing" << std::endl;
-    auto tokenItr = tokenStream.begin();
-    Block* program;
+    //std::cout << "PAR: Begin parsing" << std::endl;
+    auto itr = tokenStream.begin();
 
-    // Nella maggior parte dei casi un programma è composto da
-    // un Blocco di più statement, quindi si prova prima questo
-    // caso.
-    try
-    {
-        program = parseBlock(tokenItr);
-        std::cout << "PAR: BLOCK Program ended, returning" << std::endl;
-        return program;
-    }
-    // Problema: se il programma è un Block, le eccezioni non arrivano
-    // mai perché vengono intercettate da questo catch, dopodiché il
-    // Parser ricomincia da capo credendo che il programma sia un solo
-    // Statement, e fallisce
-    catch (std::exception e)
-    {
-        std::cout << "PAR: The program is a single Statement" << std::endl;
-        // L'iteratore ricomincia da capo
-        tokenItr = tokenStream.begin();
-    }
-    // Tuttavia sono ammessi anche programmi composti da un
-    // singolo Statement, che non fanno parte di un Block.
-    // La funzione restituisce comunque un Block, in
-    // memoria un singolo Statement viene comunque
-    // memorizzato all'interno di un Block.
-    program = nm->makeBlock();
-    program->appendStatement(parseStatement(tokenItr));
-    return program;
+    // Un intero programma è uno statement block
+    return parseStmtBlock(itr);
 }
 
 /**
@@ -83,37 +59,37 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
  */
 Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
 {
-    std::cout << "PAR: Inside parseBlock" << std::endl;
+    //std::cout << "PAR: Inside parseBlock" << std::endl;
     Block* block;
 
     // controlla LP
     if (itr->tag != Token::LP)
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "LP");
     itr++;
     
     // controlla BLOCK
     if (itr->tag != Token::BLOCK)
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "BLOCK");
     itr++;
 
-    std::cout << "PAR: BLOCK OK" << std::endl;
+    //std::cout << "PAR: BLOCK OK" << std::endl;
 
     block = nm->makeBlock();
 
     // controlla ogni statement che inizia con LP
     while (itr->tag == Token::LP)
     {
-        std::cout << "PAR: Parsing new statement inside Block..." << std::endl;
+        //std::cout << "PAR: Parsing new statement inside Block..." << std::endl;
         block->appendStatement(parseStatement(itr));
     }
 
     // controlla l'ultima RP e porta l'interatore
     // sul Token successivo
     if (itr->tag != Token::RP)
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "RP");
     itr++;
 
-    std::cout << "PAR: Block ended" << std::endl;
+    //std::cout << "PAR: Block ended" << std::endl;
     return block;
 }
 
@@ -122,24 +98,24 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
  * 
  * Effettua il parsing di uno Statement (IfStmt, WhileStmt,
  * ecc...). I token per ogni Statement devono essere:
- * - IfStmt:    (LP) IF <BoolExpr> <Block> <Block> RP
- * - WhileStmt: (LP) WHILE <BoolExpr> <Block> RP
+ * - IfStmt:    (LP) IF <BoolExpr> <StmtBlock> <StmtBlock> RP
+ * - WhileStmt: (LP) WHILE <BoolExpr> <StmtBlock> RP
  * - InputStmt: (LP) INPUT VAR RP
  * - SetStmt:   (LP) SET VAR <NumExpr> RP
  * - PrintStmt: (LP) PRINT <NumExpr> RP
  */
 Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
 {
-    std::cout << "PAR: Inside parseStatement" << std::endl;
+    //std::cout << "PAR: Inside parseStatement" << std::endl;
     // Controllo LP che apre lo statement
     if (itr->tag != Token::LP)
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "LP");
     itr++;
 
-    std::cout << "PAR: LP OK" << std::endl;
+    //std::cout << "PAR: LP OK" << std::endl;
 
     // Controllo di che Statement si tratta:
-    // IfStmt:    IF <BoolExpr> <Block> <Block> RP
+    // IfStmt:    IF <BoolExpr> <StmtBlock> <StmtBlock> RP
     if (itr->tag == Token::IF)
     {
         itr++;
@@ -150,24 +126,24 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
 
         // Controllo il primo Block, l'iteratore è già
         // sul Token successivo
-        Block* blockIf = parseBlock(itr);
+        Block* blockIf = parseStmtBlock(itr);
 
         // Controllo il secondo Block, l'iteratore è
         // già sul Token successivo
-        Block* blockElse = parseBlock(itr);
+        Block* blockElse = parseStmtBlock(itr);
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul Token
         // successivo
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
         
         return nm->makeIfStmt(condition, blockIf,
             blockElse);
     }
 
-    // WhileStmt: WHILE <BoolExpr> <Block> RP
+    // WhileStmt: WHILE <BoolExpr> <StmtBlock> RP
     if (itr->tag == Token::WHILE)
     {
         itr++;
@@ -178,13 +154,13 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
 
         // Controllo il primo Block, l'iteratore è già
         // sul Token successivo
-        Block* block = parseBlock(itr);
+        Block* block = parseStmtBlock(itr);
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul Token
         // successivo
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
 
         return nm->makeWhileStmt(condition, block);
@@ -197,7 +173,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
 
         // Controllo VAR e costruisco il nodo
         if (itr->tag != Token::VAR)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "VAR");
         itr++;
         // TODO: Variable ha sempre meno senso
         Variable* variable = nm->makeVariable(-17,
@@ -207,7 +183,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         // statement e porto l'iteratore sul token
         // successivo
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
 
         return nm->makeInputStmt(variable);
@@ -220,7 +196,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
 
         // Controllo VAR e costruisco il nodo relativo
         if (itr->tag != Token::VAR)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "VAR");
         itr++;
         // TODO: Variable ha sempre meno senso
         Variable* variable = nm->makeVariable(-17,
@@ -234,7 +210,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         // statement e porto l'iteratore sul token
         // successivo
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
 
         return nm->makeSetStmt(variable, expression);
@@ -243,7 +219,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     // PrintStmt: PRINT <NumExpr> RP
     if (itr->tag == Token::PRINT)
     {
-        std::cout << "PAR: PRINT Statement recognized" << std::endl;
+        //std::cout << "PAR: PRINT Statement recognized" << std::endl;
         itr++;
 
         // Controllo NumExpr, l'iteratore si trova
@@ -254,22 +230,53 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         // statement e porto l'iteratore sul token
         // successivo
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
 
         return nm->makePrintStmt(expression);
     }
 
-    std::cout << "PAR: Unknown Statement" << std::endl;
+    //std::cout << "PAR: Unknown Statement" << std::endl;
     
     // Se non è nessuno degli Statement già controllati,
     // c'è un errore di sintassi
-    throwSyntaxError(*itr);
+    throwSyntaxError(*itr, "<StmtType>");
 
     // Per evitare il warning. In realtà questo codice
     // è irraggiungibile perché il metodo sopra lancia
     // un'eccezione, ma il compilatore non lo sa.
     return nullptr;
+}
+
+/**
+ * parseStmtBlock
+ *
+ * Effettua il parsing di uno Statement oppure di un Block,
+ * utilizza parseStatement e parseB
+ */
+Block* Parser::parseStmtBlock(std::vector<Token>::const_iterator& itr)
+{
+    // Prima si aumenta l'iteratore di due per stabilire se
+    // lo statement block è un solo Statement o è un Block,
+    // in modo da chiamare il metodo di parsing adeguato.
+    itr += 1;
+    if (itr->tag == Token::BLOCK)
+    {
+        // L'iteratore si riporta all'inizio per poter usare
+        // il metodo di parsing.
+        itr -= 1;
+        return parseBlock(itr);
+    }
+    // L'iteratore si riporta all'inizio per poter usare
+    // il metodo di parsing.
+    itr -= 1;
+
+    Block* block = nm->makeBlock();
+    block->appendStatement(parseStatement(itr));
+    std::cout << "PAR: Block " << block << " now has " << block->getStatements().size() << " Statement(s):" << std::endl;
+    for (Statement* stmt : block->getStatements())
+        std::cout << "at " << stmt << std::endl;
+    return block;
 }
 
 /**
@@ -283,11 +290,11 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
  */
 NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
 {
-    std::cout << "PAR: Parsing NumExpr, received token " << Token::tagToStr(itr->tag) << std::endl;
+    //std::cout << "PAR: Parsing NumExpr, received token " << Token::tagToStr(itr->tag) << std::endl;
     // Number
     if (itr->tag == Token::NUM)
     {
-        std::cout << "PAR: Parsing Number, received word " << itr->word << std::endl;
+        //std::cout << "PAR: Parsing Number, received word " << itr->word << std::endl;
 
         // conversione creativa
         std::stringstream buffer;
@@ -310,7 +317,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
 
     // Controllo LP che apre ogni operazione
     if (itr->tag != Token::LP)
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "LP");
     itr++;
 
     // Controllo <opCode> e creo l'OpCode
@@ -319,7 +326,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
         (itr->tag != Token::SUB) &&
         (itr->tag != Token::MUL) &&
         (itr->tag != Token::DIV))
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "<opCode>");
     Operator::OpCode opCode;
     opCode = Operator::TokenToOpCode(*itr);
     itr++;
@@ -334,7 +341,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
 
     // Controllo RP che chiude ogni operazione
     if (itr->tag != Token::RP)
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "RP");
     itr++;
 
     return nm->makeOperator(opCode, opLeft, opRight);
@@ -368,7 +375,7 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 
     // Controllo LP che apre ogni operazione
     if (itr->tag != Token::LP)
-        throwSyntaxError(*itr);
+        throwSyntaxError(*itr, "LP");
     itr++;
 
     // BoolOp:  AND <BoolExpr> <BoolExpr> RP
@@ -389,7 +396,7 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 
         // Controllo RP che chiude ogni operazione
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
 
         return nm->makeBoolOp(opCode, opLeft, opRight);
@@ -405,7 +412,7 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 
         // Controllo RP che chiude ogni operazione
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
 
         return nm->makeBoolOp(BoolOp::NOT, op, nullptr);
@@ -431,7 +438,7 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 
         // Controllo RP che chiude ogni operazione
         if (itr->tag != Token::RP)
-            throwSyntaxError(*itr);
+            throwSyntaxError(*itr, "RP");
         itr++;
 
         return nm->makeRelOp(opCode, opLeft, opRight);
@@ -439,7 +446,7 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
 
     // Se non è nessuno degli OpCode già controllati,
     // c'è un errore di sintassi
-    throwSyntaxError(*itr);
+    throwSyntaxError(*itr, "<opCode>");
 
     // Per evitare il warning. In realtà questo codice
     // è irraggiungibile perché il metodo sopra lancia

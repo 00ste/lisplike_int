@@ -3,8 +3,10 @@
 #include "Statement.h"
 #include "NumExpr.h"
 #include "BoolExpr.h"
+#include "Exceptions.h"
 
 #include <iostream>
+#include <sstream>
 
 
 
@@ -20,8 +22,12 @@
  */
 void ExecutionVisitor::visitBlock(Block* blockNode)
 {
-	for (Statement* stmt : (*blockNode).getStatements())
-		(*stmt).accept(this);
+	std::cout << "EXE: Executing Block " << blockNode << " that contains " << blockNode->getStatements().size() << " Statements:" << std::endl;
+	for (Statement* stmt : blockNode->getStatements())
+	{
+		std::cout << "EXE: Executing Statement from Block..." << std::endl;
+		stmt->accept(this);
+	}
 }
 
 /**
@@ -131,6 +137,7 @@ void ExecutionVisitor::visitSetStmt(SetStmt* setStmtNode)
  */
 void ExecutionVisitor::visitPrintStmt(PrintStmt* printStmtNode)
 {
+	std::cout << "EXE: Printing a value" << std::endl;
 	// calcolo del valore da stampare
 	printStmtNode->getPrintValue()->accept(this);
 	// il risultato dovrebbe essere in cima alla pila
@@ -158,6 +165,8 @@ void ExecutionVisitor::visitPrintStmt(PrintStmt* printStmtNode)
      sugli operatori
  * - scrivere il risultato sulla pila perché sia accessibile
  *   agli altri visitor
+ * 
+ * Se l'operazione è matematicamente illegale, lancia un MathError
  */
 void ExecutionVisitor::visitOperator(Operator* operatorNode)
 {
@@ -184,6 +193,11 @@ void ExecutionVisitor::visitOperator(Operator* operatorNode)
 		intStack.push_back(operatorLeft * operatorRight);
 		return;
 	case Operator::DIV:
+		// La divisione per 0 non è ammessa
+		if (operatorRight == 0)
+		{
+			throw UndefinedReferenceError("division by 0.");
+		}
 		intStack.push_back(operatorLeft / operatorRight);
 		return;
 	}
@@ -193,15 +207,34 @@ void ExecutionVisitor::visitOperator(Operator* operatorNode)
  * ExecutionVisitor PER COSTANTI NUMERICHE
  * 
  * Per eseguire (valutare) costanti numeriche basta scrivere sulla
- * pila il valore numerico della costante
-  */
+ * pila il valore numerico della costante.
+ */
 void ExecutionVisitor::visitNumber(Number* numberNode)
 {
 	intStack.push_back(numberNode->getValue());
 }
 
+/**
+ * ExecutionVisitor PER VARIABILI
+ *
+ * Per eseguire (valutare) variabili basta scrivere sulla
+ * pila il valore della variabile.
+ * 
+ * Se la variabile non è mai stata inizializzata e non è presente
+ * nella std::map variables, lancia un UndefinedReferenceError.
+ */
 void ExecutionVisitor::visitVariable(Variable* variableNode)
 {
+	// Controlla prima che la variabile sia stata inizializzata
+	if (variables.find(variableNode->getName()) == variables.end())
+	{
+		std::stringstream errorMessage{};
+		errorMessage << variableNode->getName();
+		errorMessage << " was never initialized.";
+		throw UndefinedReferenceError(errorMessage.str());
+	}
+
+	intStack.push_back(variables[variableNode->getName()]);
 }
 
 /**

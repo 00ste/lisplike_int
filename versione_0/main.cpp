@@ -71,10 +71,10 @@ int main(int argc, char* argv[])
 	 * PARSING
 	 */
 	Block* program;
+	NodeManager nm{};
 	try
 	{
 		std::cout << std::endl << "Begin parsing..." << std::endl;
-		NodeManager nm{};
 		Parser parse{ &nm };
 		program = parse(inputTokens);
 	}
@@ -93,13 +93,17 @@ int main(int argc, char* argv[])
 
 	std::cout << "Parsing OK" << std::endl;
 
+	std::cout << "Generated program Block " << program << " containing " << program->getStatements().size() << " Statement(s):" << std::endl;
+	for (Statement* stmt : program->getStatements())
+		std::cout << "at " << stmt << std::endl;
+
 	/*
 	 * ESECUZIONE
 	 */
 	std::cout << "Begin execution..." << std::endl;
-	ExecutionVisitor* ev{};
+	ExecutionVisitor ev{};
 
-	program->accept(ev);
+	program->accept(&ev);
 	std::cout << "Execution terminated!" << std::endl;
 	return EXIT_SUCCESS;
 }

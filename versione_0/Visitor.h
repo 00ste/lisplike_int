@@ -33,8 +33,8 @@ public:
  * ExecutionVisitor si occupa di eseguire gli statement e
  * valutare le espressioni numeriche e booleane.
  * La classe possiede come attributi:
- * - Due buffer per memorizzare i risutlati delle operazioni
- *   numeriche e booleane
+ * - Tre buffer per memorizzare i risutlati delle operazioni
+ *   numeriche e booleane e i nomi di variabili
  * - Una mappa che contiene le variabili definite e il loro
  *   valore
  */
@@ -60,6 +60,7 @@ public:
 private:
 	std::vector<int> intStack;
 	std::vector<bool> boolStack;
+	std::vector<std::string> varStack;
 	std::map<std::string, int> variables;
 };
 
