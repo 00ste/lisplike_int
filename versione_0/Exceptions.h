@@ -74,14 +74,32 @@ struct UndefinedReferenceError : std::runtime_error
  *
  * Errore matematico (divisione per zero).
  *
- * ES: (PRINT a)
- *            ^!!
- * è un errore di sintassi perché a non è stata definita da SET o INPUT
+ * ES: (PRINT (DIV 10 0))
+ *                    ^!!
+ * è un errore matematico perché la divisione per 0 non è un'operazione
+ * lecita
  */
 struct MathError : std::runtime_error
 {
 	MathError(const char* msg) : std::runtime_error(msg) {}
 	MathError(std::string msg) : std::runtime_error(msg.c_str()) {}
+};
+
+/**
+ * InputError
+ *
+ * Errore di input
+ *
+ * ES: (INPUT a)
+ * > 17a
+ *     ^!!
+ * è un errore di input perché il carattere 'a' fornito in input non è
+ * una cifra e non può essere convertito in un intero
+ */
+struct InputError : std::runtime_error
+{
+	InputError(const char* msg) : std::runtime_error(msg) {}
+	InputError(std::string msg) : std::runtime_error(msg.c_str()) {}
 };
 
 /*

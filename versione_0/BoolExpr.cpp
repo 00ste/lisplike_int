@@ -22,3 +22,19 @@ RelOp::OpCode RelOp::tokenToOpCode(const Token& t)
 	if (t.tag == Token::EQ) return EQ;
 	return ERR;
 }
+
+std::string BoolOp::opCodeToStr(OpCode o)
+{
+	if (o == AND) return "AND";
+	if (o == NOT) return "NOT";
+	if (o == OR) return "OR";
+	return "null";
+}
+
+std::string RelOp::opCodeToStr(OpCode o)
+{
+	if (o == LT) return "LT";
+	if (o == GT) return "GT";
+	if (o == EQ) return "EQ";
+	return "null";
+}

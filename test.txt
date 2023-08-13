@@ -1,6 +1,7 @@
 (BLOCK
 	(INPUT num)
 	(SET i 0)
+	(SET hh 1001)
 	(WHILE (LT i num)
 	(BLOCK
 		(PRINT i)

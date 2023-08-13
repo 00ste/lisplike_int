@@ -4,8 +4,6 @@
 #include <sstream>
 #include <exception>
 
-#include <iostream>
-
 #include "Parser.h"
 #include "Block.h"
 #include "Statement.h"
@@ -174,10 +172,11 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         // Controllo VAR e costruisco il nodo
         if (itr->tag != Token::VAR)
             throwSyntaxError(*itr, "VAR");
-        itr++;
         // TODO: Variable ha sempre meno senso
         Variable* variable = nm->makeVariable(-17,
             itr->word);
+        std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
+        itr++;
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul token
@@ -197,10 +196,11 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         // Controllo VAR e costruisco il nodo relativo
         if (itr->tag != Token::VAR)
             throwSyntaxError(*itr, "VAR");
-        itr++;
         // TODO: Variable ha sempre meno senso
         Variable* variable = nm->makeVariable(-17,
             itr->word);
+        std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
+        itr++;
 
         // Controllo NumExpr, l'iteratore si trova
         // già sul token successivo
@@ -309,8 +309,10 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
     // Variable
     if (itr->tag == Token::VAR)
     {
+        Variable* variable = nm->makeVariable(-17, itr->word);
+        std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
-        return nm->makeVariable(-17, itr->word);
+        return variable;
     }
 
     // Operator
@@ -328,7 +330,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
         (itr->tag != Token::DIV))
         throwSyntaxError(*itr, "<opCode>");
     Operator::OpCode opCode;
-    opCode = Operator::TokenToOpCode(*itr);
+    opCode = Operator::tokenToOpCode(*itr);
     itr++;
 
     // Controllo NumExpr, l'iteratore si trova

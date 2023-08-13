@@ -7,7 +7,8 @@
 #include "Block.h"
 #include "NodeManager.h"
 #include "Parser.h"
-#include "Visitor.h"
+#include "ExecutionVisitor.h"
+#include "PrintVisitor.h"
 
 int main(int argc, char* argv[])
 {
@@ -53,6 +54,10 @@ int main(int argc, char* argv[])
 		std::cout << "Tokens: ";
 		for (Token token : inputTokens)
 			std::cout << Token::tagToStr(token.tag) << " ";
+		std::cout << std::endl;
+		for (Token token : inputTokens)
+			std::cout << token.word << " ";
+		std::cout << std::endl;
 	}
 	catch (LexicalError e)
 	{
@@ -86,7 +91,7 @@ int main(int argc, char* argv[])
 	}
 	catch (std::exception e)
 	{
-		std::cerr << "Generic Error" << std::endl;
+		std::cerr << "Generic Error:" << std::endl;
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -98,12 +103,47 @@ int main(int argc, char* argv[])
 		std::cout << "at " << stmt << std::endl;
 
 	/*
+	 * PRINT (DEBUG)
+	 */
+
+	std::cout << "Programma generato: " << std::endl;
+	PrintVisitor pv{};
+	program->accept(&pv);
+
+	/*
 	 * ESECUZIONE
 	 */
 	std::cout << "Begin execution..." << std::endl;
 	ExecutionVisitor ev{};
 
-	program->accept(&ev);
-	std::cout << "Execution terminated!" << std::endl;
-	return EXIT_SUCCESS;
+	try
+	{
+		program->accept(&ev);
+		std::cout << "Execution terminated!" << std::endl;
+		return EXIT_SUCCESS;
+	}
+	catch (InputError e)
+	{
+		std::cerr << "Input Error:" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+	catch(MathError e)
+	{
+		std::cerr << "Math Error:" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+	catch (UndefinedReferenceError e)
+	{
+		std::cerr << "UndefinedReference Error:" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+	catch (std::exception e)
+	{
+		std::cerr << "Generic Error:" << std::endl;
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
 }

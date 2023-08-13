@@ -39,7 +39,8 @@ public:
 	NumExpr* getLeft() const { return left; }
 	NumExpr* getRight() const { return right; }
 
-	static OpCode TokenToOpCode(const Token& t);
+	static OpCode tokenToOpCode(const Token& t);
+	static std::string opCodeToStr(OpCode o);
 private:
 	OpCode operation;
 	NumExpr* left;

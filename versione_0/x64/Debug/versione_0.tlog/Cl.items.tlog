@@ -1,11 +1,12 @@
 C:\code\vs22_cpp\lisplike_int\versione_0\Block.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\Block.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\BoolExpr.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\BoolExpr.obj
+C:\code\vs22_cpp\lisplike_int\versione_0\ExecutionVisitor.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\ExecutionVisitor.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\main.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\main.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\NodeManager.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\NodeManager.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\NodeManager.h;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\NodeManager.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\NumExpr.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\NumExpr.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\Parser.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\Parser.obj
+C:\code\vs22_cpp\lisplike_int\versione_0\PrintVisitor.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\PrintVisitor.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\Statement.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\Statement.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\Tokenizer.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\Tokenizer.obj
 C:\code\vs22_cpp\lisplike_int\versione_0\Tokenizer.h;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\Tokenizer.obj
-C:\code\vs22_cpp\lisplike_int\versione_0\Visitor.cpp;C:\code\vs22_cpp\lisplike_int\versione_0\x64\Debug\Visitor.obj
