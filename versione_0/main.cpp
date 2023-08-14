@@ -10,12 +10,13 @@
 #include "ExecutionVisitor.h"
 #include "PrintVisitor.h"
 
+
 int main(int argc, char* argv[])
 {
 	/*
 	 * LETTURA DEL FILE A PARTIRE DA PARAMETRI DA TERMINALE
 	 */
-	// controllo numero parametri
+	 // controllo numero parametri
 	if (argc < 2)
 	{
 		std::cerr << "Error: FILENAME not specified" << std::endl;
@@ -35,7 +36,7 @@ int main(int argc, char* argv[])
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}
-	
+
 	// lettura dell'intero file in una stringa
 	std::stringstream temp{};
 	temp << inputFile.rdbuf();
@@ -77,10 +78,10 @@ int main(int argc, char* argv[])
 	 */
 	Block* program;
 	NodeManager nm{};
+	Parser parse{ &nm };
 	try
 	{
 		std::cout << std::endl << "Begin parsing..." << std::endl;
-		Parser parse{ &nm };
 		program = parse(inputTokens);
 	}
 	catch (SyntaxError e)
@@ -105,10 +106,18 @@ int main(int argc, char* argv[])
 	/*
 	 * PRINT (DEBUG)
 	 */
-
-	std::cout << "Programma generato: " << std::endl;
 	PrintVisitor pv{};
-	program->accept(&pv);
+	try
+	{
+		std::cout << "Generated program: " << std::endl;
+		program->accept(&pv);
+	}
+	catch (std::exception e)
+	{
+		std::cerr << "Error while printing generated program: ";
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
 
 	/*
 	 * ESECUZIONE

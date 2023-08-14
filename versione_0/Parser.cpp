@@ -13,6 +13,8 @@
 #include "Token.h"
 #include "Exceptions.h"
 
+#include "PrintVisitor.h"
+
 
 
 /**
@@ -43,7 +45,7 @@ void Parser::throwSyntaxError(Token failedToken,
 Block* Parser::operator()(const std::vector<Token>& tokenStream)
 {
     //std::cout << "PAR: Begin parsing" << std::endl;
-    auto itr = tokenStream.begin();
+    auto itr = tokenStream.begin();    
 
     // Un intero programma è uno statement block
     return parseStmtBlock(itr);
@@ -144,11 +146,17 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     // WhileStmt: WHILE <BoolExpr> <StmtBlock> RP
     if (itr->tag == Token::WHILE)
     {
+        //PrintVisitor pv{};
         itr++;
+
+        //std::cout << "PAR: Started to parse WHILE-Statement condition" << std::endl;
 
         // Controllo la condizione (BoolExpr),
         // l'iteratore è già sul Token successivo
         BoolExpr* condition = parseBoolExpr(itr);
+
+        //std::cout << "PAR: Visiting WHILE-Statement condition:" << std::endl;
+        //condition->accept(&pv);
 
         // Controllo il primo Block, l'iteratore è già
         // sul Token successivo
@@ -161,7 +169,10 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
             throwSyntaxError(*itr, "RP");
         itr++;
 
-        return nm->makeWhileStmt(condition, block);
+        WhileStmt* result = nm->makeWhileStmt(condition, block);
+        //std::cout << "PAR: Visiting WHILE-Statement:" << std::endl;
+        //result->accept(&pv);
+        return result;
     }
 
     // InputStmt: INPUT VAR RP
@@ -175,7 +186,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         // TODO: Variable ha sempre meno senso
         Variable* variable = nm->makeVariable(-17,
             itr->word);
-        std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
+        //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
 
         // Controllo l'ultima RP che conclude lo
@@ -199,7 +210,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
         // TODO: Variable ha sempre meno senso
         Variable* variable = nm->makeVariable(-17,
             itr->word);
-        std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
+        //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
 
         // Controllo NumExpr, l'iteratore si trova
@@ -273,9 +284,9 @@ Block* Parser::parseStmtBlock(std::vector<Token>::const_iterator& itr)
 
     Block* block = nm->makeBlock();
     block->appendStatement(parseStatement(itr));
-    std::cout << "PAR: Block " << block << " now has " << block->getStatements().size() << " Statement(s):" << std::endl;
-    for (Statement* stmt : block->getStatements())
-        std::cout << "at " << stmt << std::endl;
+    //std::cout << "PAR: Block " << block << " now has " << block->getStatements().size() << " Statement(s):" << std::endl;
+    //for (Statement* stmt : block->getStatements())
+    //    std::cout << "at " << stmt << std::endl;
     return block;
 }
 
@@ -310,7 +321,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
     if (itr->tag == Token::VAR)
     {
         Variable* variable = nm->makeVariable(-17, itr->word);
-        std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
+        //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
         return variable;
     }
@@ -380,28 +391,43 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
         throwSyntaxError(*itr, "LP");
     itr++;
 
+    //std::cout << "PAR: Parsing an AND or OR BoolOp" << std::endl;
     // BoolOp:  AND <BoolExpr> <BoolExpr> RP
     //          OR <BoolExpr> <BoolExpr> RP
     if ((itr->tag == Token::AND) ||
         (itr->tag == Token::OR))
     {
+        //PrintVisitor pv{};
+        //std::cout << "PAR: Inside " << this << ", with token " << Token::tagToStr(itr->tag) << std::endl;
+
         // opCode
         BoolOp::OpCode opCode;
         opCode = BoolOp::tokenToOpCode(*itr);
         itr++;
+        //std::cout << "PAR: Operator is " << BoolOp::opCodeToStr(opCode) << std::endl;
 
         // Primo operando
         BoolExpr* opLeft = parseBoolExpr(itr);
+        //std::cout << "PAR: Visiting opLeft from parseBoolExpr:" << std::endl;
+        //opLeft->accept(&pv);
 
         // Secondo operando
         BoolExpr* opRight = parseBoolExpr(itr);
+        //std::cout << "PAR: Visiting opRight from parseBoolExpr:" << std::endl;
+        //opRight->accept(&pv);
+
+        //std::cout << "PAR: Created operands " << opLeft << " and " << opRight << std::endl;
 
         // Controllo RP che chiude ogni operazione
         if (itr->tag != Token::RP)
             throwSyntaxError(*itr, "RP");
         itr++;
 
-        return nm->makeBoolOp(opCode, opLeft, opRight);
+        BoolOp* result = nm->makeBoolOp(opCode, opLeft, opRight);
+        //std::cout << "PAR: Operands are " << result->getLeft() << " and " << result->getRight() << std::endl;
+        //std::cout << "PAR: Visiting BoolOp from parseBoolExpr:" << std::endl;
+        //result->accept(&pv);
+        return result;
     }
 
     // BoolOp:  NOT <BoolExpr> RP
