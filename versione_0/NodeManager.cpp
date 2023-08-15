@@ -12,7 +12,7 @@
  */
 void NodeManager::clearMemory()
 {
-	std::cout << "MAN: Clearing memory..." << std::endl;
+	//std::cout << "MAN: Clearing memory..." << std::endl;
 	for (Block* block : blockNodes)
 		delete(block);
 	for (Statement* statement : statementNodes)
@@ -88,9 +88,9 @@ Number* NodeManager::makeNumber(int v)
 	numExprNodes.push_back(x);
 	return x;
 }
-Variable* NodeManager::makeVariable(int v, const std::string& var_id)
+Variable* NodeManager::makeVariable(const std::string& var_id)
 {
-	Variable* x = new Variable(v, var_id);
+	Variable* x = new Variable(var_id);
 	numExprNodes.push_back(x);
 	return x;
 }

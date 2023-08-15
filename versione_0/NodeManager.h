@@ -34,7 +34,7 @@ public:
 
 	Operator* makeOperator(Operator::OpCode o, NumExpr* lop, NumExpr* rop);
 	Number* makeNumber(int v);
-	Variable* makeVariable(int v, const std::string& var_id);
+	Variable* makeVariable(const std::string& var_id);
 
 	RelOp* makeRelOp(RelOp::OpCode o, NumExpr* lop, NumExpr* rop);
 	BoolOp* makeBoolOp(BoolOp::OpCode o, BoolExpr* lop, BoolExpr* rop);

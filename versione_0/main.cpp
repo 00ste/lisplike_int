@@ -12,10 +12,10 @@
 
 /*
  * 
- * FAIL_DivisionByZero:				ok *
- * FAIL_EmptyBlock:					ok *
- * FAIL_EmptyProgram:				ok *
- * FAIL_LexicalError:				OK
+ * FAIL_DivisionByZero				OK
+ * FAIL_EmptyBlock					OK
+ * FAIL_EmptyProgram				OK
+ * FAIL_LexicalError				OK
  * FAIL_MismatchedParenthesis1		OK
  * FAIL_MismatchedParenthesis2		OK ??
  * FAIL_MisplacedBool				OK
@@ -41,7 +41,9 @@
  * PASS_PolyRoots1					OK
  * PASS_PolyRoots2					OK
  * PASS_Prime						OK
- * 
+ * PASS_ShortCircuit				OK
+ * PASS_SimpleSequence				OK
+ * PASS_Sum							OK
  */
 
 int main(int argc, char* argv[])
@@ -85,6 +87,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		inputTokens = tokenize(temp.str());
+		/*
 		std::cout << "Tokens: ";
 		for (Token token : inputTokens)
 			std::cout << Token::tagToStr(token.tag) << " ";
@@ -92,6 +95,7 @@ int main(int argc, char* argv[])
 		for (Token token : inputTokens)
 			std::cout << token.word << " ";
 		std::cout << std::endl;
+		*/
 	}
 	catch (LexicalError e)
 	{
@@ -114,8 +118,10 @@ int main(int argc, char* argv[])
 	Parser parse{ &nm };
 	try
 	{
-		std::cout << std::endl << "Begin parsing..." << std::endl;
+		//std::cout << std::endl << "Begin parsing..." << std::endl;
 		program = parse(inputTokens);
+		if (program == nullptr)
+			return EXIT_FAILURE;
 	}
 	catch (SyntaxError e)
 	{
@@ -176,14 +182,14 @@ int main(int argc, char* argv[])
 	}
 	catch(MathError e)
 	{
-		std::cerr << "Math Error:" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << "(ERROR in evaluator: ";
+		std::cerr << e.what() << " )" << std::endl;
 		return EXIT_FAILURE;
 	}
 	catch (std::exception e)
 	{
-		std::cerr << "Generic Error:" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << "(ERROR: ";
+		std::cerr << e.what() << " )" << std::endl;
 		return EXIT_FAILURE;
 	}
 }

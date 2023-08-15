@@ -13,8 +13,6 @@
 #include "Token.h"
 #include "Exceptions.h"
 
-#include "PrintVisitor.h"
-
 
 
 /**
@@ -57,6 +55,10 @@ void Parser::throwSyntaxError(Token failedToken,
         errorMessage << failedToken.word;
         throw SyntaxError(errorMessage.str());
     }
+    if (expectedToken == "<Statement>")
+    {
+        throw SyntaxError("Empty BLOCK statement");
+    }
 
     errorMessage << "Cannot parse expression at token ";
     errorMessage << failedToken.word;
@@ -77,6 +79,10 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
     //std::cout << "PAR: Begin parsing" << std::endl;
     auto itr = tokenStream.begin();    
     auto end = tokenStream.end();
+
+    // Se non ci sono Token
+    if (tokenStream.size() == 0)
+        return nullptr;
 
     // Un intero programma è uno statement block
     return parseStmtBlock(itr, end);
@@ -114,6 +120,12 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr,
     //std::cout << "PAR: BLOCK OK" << std::endl;
 
     block = nm->makeBlock();
+
+    // Il Block non può essere vuoto, controlla che
+    // ci sia almeno uno Statement
+    if (itr->tag != Token::LP)
+        throwSyntaxError(*itr, "<Statement>");
+    itr++;
 
     // controlla ogni statement che inizia con LP
     do
@@ -239,8 +251,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr,
         if (itr->tag != Token::VAR)
             throwSyntaxError(*itr, "VAR");
         // TODO: Variable ha sempre meno senso
-        Variable* variable = nm->makeVariable(-17,
-            itr->word);
+        Variable* variable = nm->makeVariable(itr->word);
         //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
         if (itr == end)
@@ -267,8 +278,7 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr,
         if (itr->tag != Token::VAR)
             throwSyntaxError(*itr, "VAR");
         // TODO: Variable ha sempre meno senso
-        Variable* variable = nm->makeVariable(-17,
-            itr->word);
+        Variable* variable = nm->makeVariable(itr->word);
         //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
         if (itr == end)
@@ -395,7 +405,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr,
     // Variable
     if (itr->tag == Token::VAR)
     {
-        Variable* variable = nm->makeVariable(-17, itr->word);
+        Variable* variable = nm->makeVariable(itr->word);
         //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
 

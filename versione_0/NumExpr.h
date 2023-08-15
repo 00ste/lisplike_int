@@ -72,13 +72,16 @@ private:
 };
 
 /*
- * Rappresenta variabile con un id a valore intero
+ * Rappresenta variabile con un id a valore intero.
+ * Il valore non viene memorizzato all'interno della
+ * struttura dati, poiché la variabile assume dei
+ * valori solamente a runtime.
  */
 class Variable : public NumExpr
 {
 public:
-	Variable(int v, const std::string& var_id) : name{ var_id },
-		value{v} {}
+	Variable(const std::string& var_id) :
+		name{ var_id } {}
 	Variable(const Variable& other) = default;
 	~Variable() = default;
 
@@ -86,9 +89,6 @@ public:
 
 	std::string getName() const { return name; }
 private:
-	// il valore direi che non serve, perché viene memorizzato
-	// all'interno del visitor di esecuzione in fase di esecuzione
-	int value;
 	std::string name;
 };
 

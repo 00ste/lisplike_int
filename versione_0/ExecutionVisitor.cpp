@@ -228,7 +228,7 @@ void ExecutionVisitor::visitOperator(Operator* operatorNode)
 		// La divisione per 0 non è ammessa
 		if (operandRight == 0)
 		{
-			throw MathError("division by 0.");
+			throw MathError("Division by 0.");
 		}
 		intStack.push_back(operandLeft / operandRight);
 		return;
@@ -400,30 +400,30 @@ void ExecutionVisitor::visitBoolOp(BoolOp* boolOpNode)
 	if (boolOpNode->getOp() == BoolOp::NOT)
 	{
 		boolStack.pop_back();
-		boolStack.push_back(opLeft);
+		boolStack.push_back(!opLeft);
 		return;
 	}
 	// Se l'operatore è un AND si valuta il primo operando
 	// per la cortocircuitazione
 	if (boolOpNode->getOp() == BoolOp::AND)
 	{
-		std::cout << "EXE: AND Detected!" << std::endl;
+		//std::cout << "EXE: AND Detected!" << std::endl;
 		if (!opLeft)
 		{
-			std::cout << "EXE: SC AND!! First operand was " << opLeft << std::endl;
+			//std::cout << "EXE: SC AND!! First operand was " << opLeft << std::endl;
 			return;
 		}
 		boolStack.pop_back();
-		std::cout << "EXE: First operand was " << opLeft << ", need to check second operand" << std::endl;
+		//std::cout << "EXE: First operand was " << opLeft << ", need to check second operand" << std::endl;
 	}
 	// Se l'operatore è un OR si valuta il primo operando
 	// per la cortocircuitazione
 	if (boolOpNode->getOp() == BoolOp::OR)
 	{
-		std::cout << "EXE: OR Detected!" << std::endl;
+		//std::cout << "EXE: OR Detected!" << std::endl;
 		if (opLeft)
 		{
-			std::cout << "EXE: SC OR!! First operand was " << opLeft << std::endl;
+			//std::cout << "EXE: SC OR!! First operand was " << opLeft << std::endl;
 			return;
 		}
 		boolStack.pop_back();
@@ -432,7 +432,7 @@ void ExecutionVisitor::visitBoolOp(BoolOp* boolOpNode)
 	// Il risultato è determinato dal secondo operatore,
 	// si valuta e basta, così rimane nella pila
 	boolOpNode->getRight()->accept(this);
-	std::cout << "EXE: Second operand was " << boolStack.back() << std::endl;
+	//std::cout << "EXE: Second operand was " << boolStack.back() << std::endl;
 	return;
 }
 /*

@@ -7,7 +7,7 @@ struct Token
 {
 	enum Tag { LP, RP, BLOCK, IF, WHILE, INPUT, SET,
 		PRINT, ADD, SUB, MUL, DIV, NUM, VAR, GT, LT,
-		EQ, AND, OR, NOT, TRUE, FALSE };
+		EQ, AND, OR, NOT, TRUE, FALSE, ERR };
 
 	Token(Token::Tag t, const char* w) : tag{ t }, word{ w } {}
 	Token(Token::Tag t, std::string w) : tag{ t }, word{ w } {}
@@ -34,6 +34,7 @@ struct Token
 		if (s == "NOT") return NOT;
 		if (s == "TRUE") return TRUE;
 		if (s == "FALSE") return FALSE;
+		return ERR;
 	}
 	
 	static std::string tagToStr(Tag s)

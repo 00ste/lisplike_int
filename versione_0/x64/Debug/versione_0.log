@@ -1,2 +1,5 @@
-﻿  ExecutionVisitor.cpp
+﻿  NodeManager.cpp
+  Parser.cpp
+  main.cpp
+  Generating Code...
   versione_0.vcxproj -> C:\code\vs22_cpp\lisplike_int\x64\Debug\versione_0.exe
