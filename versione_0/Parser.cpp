@@ -27,9 +27,39 @@ void Parser::throwSyntaxError(Token failedToken,
     std::string expectedToken)
 {
     std::stringstream errorMessage{};
-    errorMessage << "error while parsing at token ";
-    errorMessage << Token::tagToStr(failedToken.tag);
-    errorMessage << ", " << expectedToken << " expected.";
+
+    // Invio un messaggio di errore diverso in base
+    // al token atteso
+    if (expectedToken == "LP")
+    {
+        errorMessage << "Missing left parenthesis at token ";
+        errorMessage << failedToken.word;
+        throw SyntaxError(errorMessage.str());
+    }
+
+    if (expectedToken == "RP")
+    {
+        errorMessage << "Missing right parenthesis at token ";
+        errorMessage << failedToken.word;
+        throw SyntaxError(errorMessage.str());
+    }
+
+    if (expectedToken == "<opCode>")
+    {
+        errorMessage << "Unrecognized operator ";
+        errorMessage << failedToken.word;
+        throw SyntaxError(errorMessage.str());
+    }
+
+    if (expectedToken == "VAR")
+    {
+        errorMessage << "Expected a variable, got ";
+        errorMessage << failedToken.word;
+        throw SyntaxError(errorMessage.str());
+    }
+
+    errorMessage << "Cannot parse expression at token ";
+    errorMessage << failedToken.word;
     throw SyntaxError(errorMessage.str());
 }
 
@@ -46,9 +76,10 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
 {
     //std::cout << "PAR: Begin parsing" << std::endl;
     auto itr = tokenStream.begin();    
+    auto end = tokenStream.end();
 
     // Un intero programma è uno statement block
-    return parseStmtBlock(itr);
+    return parseStmtBlock(itr, end);
 }
 
 /**
@@ -57,8 +88,14 @@ Block* Parser::operator()(const std::vector<Token>& tokenStream)
  * Effettua il parsing di un Block, i token devono essere:
  * LP BLOCK <Statement> ... <Statement> RP
  */
-Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
+Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr,
+    const std::vector<Token>::const_iterator& end)
 {
+    // Controllo prima di non aver ricevuto un iteratore
+    // fuori range
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
+
     //std::cout << "PAR: Inside parseBlock" << std::endl;
     Block* block;
 
@@ -66,6 +103,8 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
     if (itr->tag != Token::LP)
         throwSyntaxError(*itr, "LP");
     itr++;
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
     
     // controlla BLOCK
     if (itr->tag != Token::BLOCK)
@@ -77,11 +116,12 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
     block = nm->makeBlock();
 
     // controlla ogni statement che inizia con LP
-    while (itr->tag == Token::LP)
+    do
     {
         //std::cout << "PAR: Parsing new statement inside Block..." << std::endl;
-        block->appendStatement(parseStatement(itr));
+        block->appendStatement(parseStatement(itr, end));
     }
+    while (itr->tag == Token::LP);
 
     // controlla l'ultima RP e porta l'interatore
     // sul Token successivo
@@ -104,13 +144,22 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr)
  * - SetStmt:   (LP) SET VAR <NumExpr> RP
  * - PrintStmt: (LP) PRINT <NumExpr> RP
  */
-Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
+Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr,
+    const std::vector<Token>::const_iterator& end)
 {
     //std::cout << "PAR: Inside parseStatement" << std::endl;
+    
+    // Controllo prima di non aver ricevuto un iteratore
+    // fuori range
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
+
     // Controllo LP che apre lo statement
     if (itr->tag != Token::LP)
         throwSyntaxError(*itr, "LP");
     itr++;
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
 
     //std::cout << "PAR: LP OK" << std::endl;
 
@@ -119,18 +168,20 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     if (itr->tag == Token::IF)
     {
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Controllo la condizione (BoolExpr), l'iteratore
         // è già sul Token successivo
-        BoolExpr* condition = parseBoolExpr(itr);
+        BoolExpr* condition = parseBoolExpr(itr, end);
 
         // Controllo il primo Block, l'iteratore è già
         // sul Token successivo
-        Block* blockIf = parseStmtBlock(itr);
+        Block* blockIf = parseStmtBlock(itr, end);
 
         // Controllo il secondo Block, l'iteratore è
         // già sul Token successivo
-        Block* blockElse = parseStmtBlock(itr);
+        Block* blockElse = parseStmtBlock(itr, end);
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul Token
@@ -148,19 +199,21 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     {
         //PrintVisitor pv{};
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         //std::cout << "PAR: Started to parse WHILE-Statement condition" << std::endl;
 
         // Controllo la condizione (BoolExpr),
         // l'iteratore è già sul Token successivo
-        BoolExpr* condition = parseBoolExpr(itr);
+        BoolExpr* condition = parseBoolExpr(itr, end);
 
         //std::cout << "PAR: Visiting WHILE-Statement condition:" << std::endl;
         //condition->accept(&pv);
 
         // Controllo il primo Block, l'iteratore è già
         // sul Token successivo
-        Block* block = parseStmtBlock(itr);
+        Block* block = parseStmtBlock(itr, end);
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul Token
@@ -179,6 +232,8 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     if (itr->tag == Token::INPUT)
     {
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Controllo VAR e costruisco il nodo
         if (itr->tag != Token::VAR)
@@ -188,6 +243,8 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
             itr->word);
         //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul token
@@ -203,6 +260,8 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     if (itr->tag == Token::SET)
     {
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Controllo VAR e costruisco il nodo relativo
         if (itr->tag != Token::VAR)
@@ -212,10 +271,12 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
             itr->word);
         //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Controllo NumExpr, l'iteratore si trova
         // già sul token successivo
-        NumExpr* expression = parseNumExpr(itr);
+        NumExpr* expression = parseNumExpr(itr, end);
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul token
@@ -232,10 +293,12 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
     {
         //std::cout << "PAR: PRINT Statement recognized" << std::endl;
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Controllo NumExpr, l'iteratore si trova
         // già sul token successivo
-        NumExpr* expression = parseNumExpr(itr);
+        NumExpr* expression = parseNumExpr(itr, end);
 
         // Controllo l'ultima RP che conclude lo
         // statement e porto l'iteratore sul token
@@ -265,25 +328,29 @@ Statement* Parser::parseStatement(std::vector<Token>::const_iterator& itr)
  * Effettua il parsing di uno Statement oppure di un Block,
  * utilizza parseStatement e parseB
  */
-Block* Parser::parseStmtBlock(std::vector<Token>::const_iterator& itr)
+Block* Parser::parseStmtBlock(std::vector<Token>::const_iterator& itr,
+    const std::vector<Token>::const_iterator& end)
 {
     // Prima si aumenta l'iteratore di due per stabilire se
     // lo statement block è un solo Statement o è un Block,
     // in modo da chiamare il metodo di parsing adeguato.
     itr += 1;
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
+
     if (itr->tag == Token::BLOCK)
     {
         // L'iteratore si riporta all'inizio per poter usare
         // il metodo di parsing.
         itr -= 1;
-        return parseBlock(itr);
+        return parseBlock(itr, end);
     }
     // L'iteratore si riporta all'inizio per poter usare
     // il metodo di parsing.
     itr -= 1;
 
     Block* block = nm->makeBlock();
-    block->appendStatement(parseStatement(itr));
+    block->appendStatement(parseStatement(itr, end));
     //std::cout << "PAR: Block " << block << " now has " << block->getStatements().size() << " Statement(s):" << std::endl;
     //for (Statement* stmt : block->getStatements())
     //    std::cout << "at " << stmt << std::endl;
@@ -299,9 +366,16 @@ Block* Parser::parseStmtBlock(std::vector<Token>::const_iterator& itr)
  * - Variable:  VAR
  * - Operator:  LP <opCode> <NumExpr> <NumExpr> RP
  */
-NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
+NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr,
+    const std::vector<Token>::const_iterator& end)
 {
     //std::cout << "PAR: Parsing NumExpr, received token " << Token::tagToStr(itr->tag) << std::endl;
+    
+    // Controllo prima di non aver ricevuto un iteratore
+    // fuori range
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
+
     // Number
     if (itr->tag == Token::NUM)
     {
@@ -314,6 +388,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
         buffer >> value;
 
         itr++;
+
         return nm->makeNumber(value);
     }
 
@@ -323,6 +398,7 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
         Variable* variable = nm->makeVariable(-17, itr->word);
         //std::cout << "PAR: Created Variable with name: " << variable->getName() << std::endl;
         itr++;
+
         return variable;
     }
 
@@ -332,6 +408,8 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
     if (itr->tag != Token::LP)
         throwSyntaxError(*itr, "LP");
     itr++;
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
 
     // Controllo <opCode> e creo l'OpCode
     // corrispondente
@@ -343,14 +421,16 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
     Operator::OpCode opCode;
     opCode = Operator::tokenToOpCode(*itr);
     itr++;
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
 
     // Controllo NumExpr, l'iteratore si trova
     // già sul token successivo
-    NumExpr* opLeft = parseNumExpr(itr);
+    NumExpr* opLeft = parseNumExpr(itr, end);
     
     // Controllo NumExpr, l'iteratore si trova
     // già sul token successivo
-    NumExpr* opRight = parseNumExpr(itr);
+    NumExpr* opRight = parseNumExpr(itr, end);
 
     // Controllo RP che chiude ogni operazione
     if (itr->tag != Token::RP)
@@ -369,8 +449,14 @@ NumExpr* Parser::parseNumExpr(std::vector<Token>::const_iterator& itr)
  * - BoolOp:    LP <opCode> <BoolExpr> <BoolExpr> RP
  * - RelOp:     LP <opCode> <NumExpr> <NumExpr> RP
  */
-BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
+BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr,
+    const std::vector<Token>::const_iterator& end)
 {
+    // Controllo prima di non aver ricevuto un iteratore
+    // fuori range
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
+
     // BoolConst
     if (itr->tag == Token::TRUE)
     {
@@ -390,6 +476,8 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
     if (itr->tag != Token::LP)
         throwSyntaxError(*itr, "LP");
     itr++;
+    if (itr == end)
+        throw SyntaxError("Overflow in token stream.");
 
     //std::cout << "PAR: Parsing an AND or OR BoolOp" << std::endl;
     // BoolOp:  AND <BoolExpr> <BoolExpr> RP
@@ -404,15 +492,18 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
         BoolOp::OpCode opCode;
         opCode = BoolOp::tokenToOpCode(*itr);
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
+
         //std::cout << "PAR: Operator is " << BoolOp::opCodeToStr(opCode) << std::endl;
 
         // Primo operando
-        BoolExpr* opLeft = parseBoolExpr(itr);
+        BoolExpr* opLeft = parseBoolExpr(itr, end);
         //std::cout << "PAR: Visiting opLeft from parseBoolExpr:" << std::endl;
         //opLeft->accept(&pv);
 
         // Secondo operando
-        BoolExpr* opRight = parseBoolExpr(itr);
+        BoolExpr* opRight = parseBoolExpr(itr, end);
         //std::cout << "PAR: Visiting opRight from parseBoolExpr:" << std::endl;
         //opRight->accept(&pv);
 
@@ -434,9 +525,11 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
     if (itr->tag == Token::NOT)
     {
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Operando
-        BoolExpr* op = parseBoolExpr(itr);
+        BoolExpr* op = parseBoolExpr(itr, end);
 
         // Controllo RP che chiude ogni operazione
         if (itr->tag != Token::RP)
@@ -457,12 +550,14 @@ BoolExpr* Parser::parseBoolExpr(std::vector<Token>::const_iterator& itr)
         RelOp::OpCode opCode;
         opCode = RelOp::tokenToOpCode(*itr);
         itr++;
+        if (itr == end)
+            throw SyntaxError("Overflow in token stream.");
 
         // Primo operando
-        NumExpr* opLeft = parseNumExpr(itr);
+        NumExpr* opLeft = parseNumExpr(itr, end);
 
         // Secondo operando
-        NumExpr* opRight = parseNumExpr(itr);
+        NumExpr* opRight = parseNumExpr(itr, end);
 
         // Controllo RP che chiude ogni operazione
         if (itr->tag != Token::RP)

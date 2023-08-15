@@ -8,7 +8,7 @@
 
 std::vector<Token> Tokenizer::operator()(std::string inputText)
 {
-	std::cout << "File received: " << std::endl << inputText << std::endl;
+	//std::cout << "TOK: File received: " << std::endl << inputText << std::endl;
 	std::vector<Token> inputTokens;
 	tokenizeInputText(inputText, inputTokens);
 	return inputTokens;
@@ -17,31 +17,39 @@ std::vector<Token> Tokenizer::operator()(std::string inputText)
 int Tokenizer::isKeyword(std::string word)
 {
 	// Parole chiave (definite in keywords)
-	// std::cout << "TOK: checking for keyword \"" << word << "\"" << std::endl;
+	//std::cout << "TOK: checking for keyword \"" << word << "\"" << std::endl;
 	for (int index = 0; index < keywords.size(); index++)
 	{
 		if (word == keywords[index])
 		{
-			// std::cout << "TOK: keyword found!" << std::endl;
+			//std::cout << "TOK: keyword found!" << std::endl;
 			return index;
 		}
 	}
-	// std::cout << "TOK: not a keyword" << std::endl;
+	//std::cout << "TOK: not a keyword" << std::endl;
 	return -1;
 }
 
 void Tokenizer::tokenizeInputText(std::string inputText, std::vector<Token>& inputTokens)
 {
 	int index = 0;
+	int line = 1;
 
 	// lettura del file carattere per carattere
 	while (index < inputText.size())
 	{
-		// std::cout << "TOK: new loop, index is: " << index << ", character is " << inputText.at(index) << std::endl;
+		//std::cout << "TOK: new loop, index is: " << index << ", character is " << inputText.at(index) << std::endl;
 		// Salto gli spazi bianchi
 		if (std::isspace(inputText[index]))
 		{
-			// std::cout << "TOK: found white space" << std::endl;
+			// Conta una nuova linea per ogni accapo
+			if (inputText[index] == '\n')
+			{
+				//std::cout << "TOK: End of line " << line << std::endl;
+				line++;
+			}
+				
+			//std::cout << "TOK: found white space" << std::endl;
 			index++;
 			continue;
 		}
@@ -49,7 +57,7 @@ void Tokenizer::tokenizeInputText(std::string inputText, std::vector<Token>& inp
 		// Parentesi aperta
 		if (inputText[index] == '(')
 		{
-			// std::cout << "TOK: found open bracket" << std::endl;
+			//std::cout << "TOK: found open bracket" << std::endl;
 			index++;
 			inputTokens.push_back(Token{ Token::LP, "(" });
 			continue;
@@ -58,9 +66,10 @@ void Tokenizer::tokenizeInputText(std::string inputText, std::vector<Token>& inp
 		// Parentesi chiusa
 		if (inputText[index] == ')')
 		{
-			// std::cout << "TOK: found closed bracket" << std::endl;
+			//std::cout << "TOK: found closed bracket" << std::endl;
 			index++;
 			inputTokens.push_back(Token{ Token::RP, ")" });
+			continue;
 		}
 
 		// Identificatori: Variabili e parole chiave
@@ -99,23 +108,31 @@ void Tokenizer::tokenizeInputText(std::string inputText, std::vector<Token>& inp
 				// Parole chiave
 				std::string keyword = keywords[keywordIndex];
 				inputTokens.push_back(Token{ Token::strToTag(keyword), keyword });
-				continue;
 			}
 			else
 			{
 				// Variabili
 				//std::cout << "TOK: " << identifier << " is a variable name" << std::endl;
 				inputTokens.push_back(Token{ Token::VAR, identifier });
-				continue;
 			}
+			continue;
 		}
 
 		// Costanti numeriche
-		if (std::isdigit(inputText[index]))
+		if (std::isdigit(inputText[index]) || inputText[index] == '-')
 		{
 			//std::cout << "TOK: found the start of a number" << std::endl;
-			// Individuo l'intero numero (finché ci sono cifre)
+			// Individuo l'intero numero:
+
+			// Eventualmente il segno -
 			std::stringstream temp;
+			if (inputText[index] == '-')
+			{
+				temp << '-';
+				index++;
+			}
+			
+			// E tutte le cifre successive
 			while (std::isdigit(inputText[index]))
 			{
 				//std::cout << "TOK: still inside the number (" << inputText[index] << " at " << index << ")" << std::endl;
@@ -126,7 +143,14 @@ void Tokenizer::tokenizeInputText(std::string inputText, std::vector<Token>& inp
 			//std::cout << "TOK: number ended (" << number << ")" << std::endl;
 
 			inputTokens.push_back(Token{ Token::NUM, number });
+			continue;
 		}
+
+		// Se non è nulla di tutto ciò, c'è un errore
+		std::stringstream errorMessage;
+		errorMessage << "Stray character " << inputText[index];
+		errorMessage << " in input at line " << line;
+		throw LexicalError(errorMessage.str());
 	}
 }
 

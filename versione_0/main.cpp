@@ -10,6 +10,39 @@
 #include "ExecutionVisitor.h"
 #include "PrintVisitor.h"
 
+/*
+ * 
+ * FAIL_DivisionByZero:				ok *
+ * FAIL_EmptyBlock:					ok *
+ * FAIL_EmptyProgram:				ok *
+ * FAIL_LexicalError:				OK
+ * FAIL_MismatchedParenthesis1		OK
+ * FAIL_MismatchedParenthesis2		OK ??
+ * FAIL_MisplacedBool				OK
+ * FAIL_MissingElse					OK ??
+ * FAIL_MissingGuard				OK
+ * FAIL_MissingOperand				ok *
+ * FAIL_MultipleErrors1				OK
+ * FAIL_MultipleErrors2				ok *
+ * FAIL_UndeclaredVariable			OK
+ * FAIL_WrongIdentifier1			ok ???
+ * FAIL_WrongIdentifier2			OK
+ * PASS_BoolExpr					OK
+ * PASS_Factorial					OK
+ * PASS_Fibonacci1					OK
+ * PASS_Fibonacci2					OK
+ * PASS_Fibonacci3					OK
+ * PASS_Logarithm1					OK
+ * PASS_Logarithm2					OK
+ * PASS_Logarithm3					OK
+ * PASS_Logarithm4					OK
+ * PASS_ManyPrimes					OK
+ * PASS_Modulo						OK
+ * PASS_PolyRoots1					OK
+ * PASS_PolyRoots2					OK
+ * PASS_Prime						OK
+ * 
+ */
 
 int main(int argc, char* argv[])
 {
@@ -42,7 +75,7 @@ int main(int argc, char* argv[])
 	temp << inputFile.rdbuf();
 	inputFile.close();
 
-	std::cout << "File read: " << std::endl << temp.str() << std::endl;
+	//std::cout << "File read: " << std::endl << temp.str() << std::endl;
 
 	/*
 	 * TOKENIZZAZIONE
@@ -62,14 +95,14 @@ int main(int argc, char* argv[])
 	}
 	catch (LexicalError e)
 	{
-		std::cerr << "Lexical Error:" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << "(ERROR in tokenizer: ";
+		std::cerr << e.what() << " )" << std::endl;
 		return EXIT_FAILURE;
 	}
 	catch (std::exception e)
 	{
-		std::cerr << "Generic Error" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << "(ERROR: ";
+		std::cerr << e.what() << " )" << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -86,26 +119,29 @@ int main(int argc, char* argv[])
 	}
 	catch (SyntaxError e)
 	{
-		std::cerr << "Syntax Error:" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << "(ERROR in parser: ";
+		std::cerr << e.what() << " )" << std::endl;
 		return EXIT_FAILURE;
 	}
 	catch (std::exception e)
 	{
-		std::cerr << "Generic Error:" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << "(ERROR: ";
+		std::cerr << e.what() << " )" << std::endl;
 		return EXIT_FAILURE;
 	}
 
+	/*
 	std::cout << "Parsing OK" << std::endl;
 
 	std::cout << "Generated program Block " << program << " containing " << program->getStatements().size() << " Statement(s):" << std::endl;
 	for (Statement* stmt : program->getStatements())
 		std::cout << "at " << stmt << std::endl;
+	*/
 
 	/*
 	 * PRINT (DEBUG)
 	 */
+	/*
 	PrintVisitor pv{};
 	try
 	{
@@ -118,34 +154,29 @@ int main(int argc, char* argv[])
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}
+	*/
 
 	/*
 	 * ESECUZIONE
 	 */
-	std::cout << "Begin execution..." << std::endl;
+	//std::cout << "Begin execution..." << std::endl;
 	ExecutionVisitor ev{};
 
 	try
 	{
 		program->accept(&ev);
-		std::cout << "Execution terminated!" << std::endl;
+		//std::cout << "Execution terminated!" << std::endl;
 		return EXIT_SUCCESS;
 	}
-	catch (InputError e)
+	catch (UndefinedReferenceError e)
 	{
-		std::cerr << "Input Error:" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << "(ERROR in evaluator: ";
+		std::cerr << e.what() << " )" << std::endl;
 		return EXIT_FAILURE;
 	}
 	catch(MathError e)
 	{
 		std::cerr << "Math Error:" << std::endl;
-		std::cerr << e.what() << std::endl;
-		return EXIT_FAILURE;
-	}
-	catch (UndefinedReferenceError e)
-	{
-		std::cerr << "UndefinedReference Error:" << std::endl;
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}

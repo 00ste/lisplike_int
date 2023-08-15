@@ -25,11 +25,16 @@ private:
 
 	void throwSyntaxError(Token failedToken, std::string expectedToken);
 
-	Block* parseBlock(std::vector<Token>::const_iterator& itr);
-	Statement* parseStatement(std::vector<Token>::const_iterator& itr);
-	Block* parseStmtBlock(std::vector<Token>::const_iterator& itr);
-	NumExpr* parseNumExpr(std::vector<Token>::const_iterator& itr);
-	BoolExpr* parseBoolExpr(std::vector<Token>::const_iterator& itr);
+	Block* parseBlock(std::vector<Token>::const_iterator& itr,
+		const std::vector<Token>::const_iterator& end);
+	Statement* parseStatement(std::vector<Token>::const_iterator& itr,
+		const std::vector<Token>::const_iterator& end);
+	Block* parseStmtBlock(std::vector<Token>::const_iterator& itr,
+		const std::vector<Token>::const_iterator& end);
+	NumExpr* parseNumExpr(std::vector<Token>::const_iterator& itr,
+		const std::vector<Token>::const_iterator& end);
+	BoolExpr* parseBoolExpr(std::vector<Token>::const_iterator& itr,
+		const std::vector<Token>::const_iterator& end);
 };
 
 #endif
