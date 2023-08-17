@@ -11,6 +11,9 @@ std::vector<Token> Tokenizer::operator()(std::string inputText)
 	//std::cout << "TOK: File received: " << std::endl << inputText << std::endl;
 	std::vector<Token> inputTokens;
 	tokenizeInputText(inputText, inputTokens);
+	//for (Token t : inputTokens)
+	// 	std::cout << Token::tagToStr(t.tag) << " ";
+	//std::cout << std::endl;
 	return inputTokens;
 }
 

@@ -125,7 +125,9 @@ Block* Parser::parseBlock(std::vector<Token>::const_iterator& itr,
     // ci sia almeno uno Statement
     if (itr->tag != Token::LP)
         throwSyntaxError(*itr, "<Statement>");
-    itr++;
+    // Non incremento l'indice perché la parentesi
+    // fa parte di Statement, verrà controllata da
+    // parseStatement
 
     // controlla ogni statement che inizia con LP
     do
